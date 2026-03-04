@@ -184,20 +184,20 @@ int retrieve(List *list, int index){
 }
 
 int locate(List *list, int data){
-    int retval = -1
-    if(list->head == NULL){
-       //do nothing
-    } else {
-        Node* current = list->head;
-        for(int index = 0; current->next != NULL; index++){
-            if(current->data == data){
-                retval = index;
-            }
+    int retval = -1;
+    Node* current = list->head;
+    int index = 0;
+
+    while(current != NULL && retval == -1){
+        if(current->data == data){
+            retval = index;
+        } else {
             current = current->next;
+            index++;
         }
     }
-    return retval;
 
+    return retval;
 }
 
 void display(List *list){

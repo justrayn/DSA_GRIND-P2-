@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #define MAX 10
-
+// remember this should run and ms should be able to check the information
 typedef struct {
     int elem[MAX];
     int count;
