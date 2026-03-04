@@ -51,6 +51,7 @@ List empty(List L){
     }
     list.head = NULL;
     list.count = 0;
+    return list;
 }
 
 List insertFirst(List list, int data){
@@ -167,9 +168,9 @@ int locate(List list, int data){
         return -1;
     }
     
-    Node* current = list.head;
+    Node* current;
     int index = 0;
-    for(; current->next != NULL; index++){
+    for(current = list.head; current->next != NULL; index++){
         if(current->data == data){
             return index;
         }
