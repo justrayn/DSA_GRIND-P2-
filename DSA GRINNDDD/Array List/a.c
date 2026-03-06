@@ -8,52 +8,53 @@ typedef struct {
     int count;
 }Etype, *Eptr;
 
-void init(Eptr L);
-void insertPos(Eptr L, int data, int pos);
-void deletePos(Eptr L, int pos);
-void insertSorted(Eptr L, int data);
-void makeNULL(Eptr L);
+void init(Eptr l);
+void insertPos(Eptr l, int pos, int data);
+void deletePos(Eptr l, int pos, int data);
+void insertSorted(Eptr l, int data);
+void makeNULL(Eptr l);
 
 int main(){
-    Eptr L = malloc(sizeof(Etype));
-
+    Eptr l = malloc(sizeof(Etype));
 
     return 0;
 }
 
-void init(Eptr L){
-    L->count = 0;
+void init(Eptr l){
+    l->count = 0;
 }
-void insertPos(Eptr L, int data, int pos){
-    if(pos < 0 || pos > L->count || L->count >= MAX){
-        printf("invalid\n");
+void insertPos(Eptr l, int pos, int data){
+    if(pos < 0 || pos > l->count || l->count >= MAX){
+        printf("ur being way too much bro...\n");
     } else {
-        for(int i = L->count; i > pos; i--){
-            L->elem[i] = L->elem[i - 1];
+        for(i = l->count; i > pos; i--){
+            l->elem[i] = l->elem[i - 1];
         }
-        L->count++;
-        L->elem[pos] = data;
+        l->count++;
+        l->elem[pos] = data;
     }
 }
-void deletePos(Eptr L, int pos){
-    if(pos < 0 || pos > L->count ){
-        printf("invalid\n");
+void deletePos(Eptr l, int pos, int data){
+    if(pos < 0 || pos > l->count){
+        printf("ur being way too much bro...\n");
     } else {
-        for(int i = pos; i < L->count - 1; i++){
-            L->elem[i] = L->elem[i + 1];
+        for(i = pos; i < l->count - 1; i++){
+            l->elem[i] = l->elem[i + 1];
         }
-        L->count--;
+        l->count--;
     }
 }
-void insertSorted(Eptr L, int data){
-    if(L->count >= MAX){
-        printf("invalid\n");
+void insertSorted(Eptr l, int data){
+    if(l->count >= MAX){
+        printf("ur being way too much bro...\n");
     } else {
-        for(int i = L->count - 1; i >= 0 && L->elem[i] > data; i--){
-            L->elem[i + 1] = L->elem[i];
+        for(i = l->count - 1; i > 0 && l->elem[i] > data; i--){
+            l->elem[i + 1] = l->elem[i];
         }
-        L->count++;
-        L->elem[pos + 1] = data;
+        l->count++;
+        l->elem[pos + 1];
     }
 }
-void makeNULL(Eptr L);
+void makeNULL(Eptr l){
+    free(l);
+}
