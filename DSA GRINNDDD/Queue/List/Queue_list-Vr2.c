@@ -21,12 +21,12 @@ int dequeue(Queue* q);
 int front(Queue* q);
 void display(Queue* q);
 
-int main (){
+int main () {
 
-    Queue *q = initialize();
+    Queue* q = initialize();
     int num, choice;
     do{
-        printf("\nMenu:\n[1]: enqueue\n[2]: dequeue\n[3]: front\n[4]: Display\n[0]: Exit\n");
+        printf("\nMenu:\n[1]: enqueue\n[2]: dequeue\n[3]: rear\n[4]: Display\n[0]: Exit\n");
         printf("Enter Choice: ");
         scanf("%d", &choice);
 
@@ -44,7 +44,7 @@ int main (){
                 break;
             case 3:
                 if(!isEmpty(q)){
-                    printf("front element is %d\n", front(q));
+                    printf("front element is %d\n", rear(q));
                 } else {
                     printf("Queue is empty.\n");
                 }
@@ -84,8 +84,8 @@ bool isFull(Queue* q){
 }
 
 bool isEmpty(Queue* q){
-    // Queue is empty if front is NULL
-    return (q->front == NULL);
+    // Return false if rear is NULL
+    return (q->rear == NULL);
 }
 
 void enqueue(Queue* q, int value){
@@ -94,10 +94,10 @@ void enqueue(Queue* q, int value){
     Set the data of the new node and set its next pointer to NULL
     Check if the queue is currently empty
     If the queue is empty, the new node is both the front and the rear
-    If the queue is not empty, link the current rear to the new node
-    Then, update the rear pointer to the new node
+    If the queue is not empty, link the current front to the new node
+    Then, update the front pointer to the new node
     */
-
+   
     Node* newNode = malloc(sizeof(Node));
     newNode->data = value;
     newNode->next = NULL;
@@ -106,19 +106,19 @@ void enqueue(Queue* q, int value){
         q->front = newNode;
         q->rear = newNode;
     } else {
-        q->rear->next = newNode;
-        q->rear = newNode;
+        q->front->next = newNode;
+        q->front = newNode;
     }
 }
 
 int dequeue(Queue* q){
     /*
     Check if the queue is empty before attempting to dequeue
-    Store a temporary pointer to the front node
-    Store the data of the front node
-    Move the front pointer to the next node
-    If the queue becomes empty after this operation, update the rear pointer to NULL
-    Free the memory of the old front node
+    Store a temporary pointer to the rear node
+    Store the data of the rear node
+    Move the rear pointer to the next node
+    If the queue becomes empty after this operation, update the front pointer to NULL
+    Free the memory of the old rear node
     Return the stored value
     */
 
@@ -126,28 +126,28 @@ int dequeue(Queue* q){
         printf("Queue is empty.\n");
         return -1;
     }
-    
-    Node* temp = q->front;
+
+    Node* temp = q->rear;
     int value = temp->data;
-    q->front = temp->next;
+    q->rear = temp->next;
     if(isEmpty(q)){
-        q->rear = NULL;
+        q->front = NULL;
     }
     free(temp);
     return value;
 }
 
-int front(Queue* q){
+int rear(Queue* q){
     /*
     Check if the queue is empty
-    Otherwise, return the data of the front node
+    Otherwise, return the data of the rear node
     */
 
     if(isEmpty(q)){
         printf("Queue is empty.\n");
         return -1;
     }
-    return q->front->data;
+    return q->rear->data;
 }
 
 void display(Queue* q){
@@ -161,8 +161,8 @@ void display(Queue* q){
         printf("Queue is empty.\n");
         return;
     }
-    Node* temp = q->front;
-    printf("front -> ");
+    Node* temp = q->rear;
+    printf("rear -> ");
     for(int i = 0; temp != NULL; i++){
         printf("%d -> ", temp->data);
         temp = temp->next;
