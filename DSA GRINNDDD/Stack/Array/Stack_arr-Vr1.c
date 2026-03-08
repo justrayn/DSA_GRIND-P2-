@@ -50,6 +50,7 @@ int main (){
             case 4:
                 int topval = top(s);
                 printf("Top Value = %d\n", topval);
+                break;
             case 5:
                 display(s);
                 break;
@@ -67,17 +68,13 @@ int main (){
 
 // Functions
 Stack* initialize(){
-    /*  
-    Allocate memory for a Stack structure
-    Initialize the top of the stack to -1 to indicate it's empty
-    Return the pointer to the stack 
-    */
-
     Stack* newStack = malloc(sizeof(Stack));
-    newStack->top = -1;
+
+    if(newStack != NULL){
+        newStack->top = -1;
+    }
     return newStack;
 }
-
 bool isFull(Stack* s){
     // Return true if top is top == MAX - 1
     return(s->top == MAX - 1) ? true : false;
@@ -97,10 +94,10 @@ void push(Stack* s, int value){
 
     if(isFull(s)){
         printf("Stack is full.\n");
-        return;
+    } else {
+        s->top++;
+        s->items[s->top] = value;
     }
-    s->top++;
-    s->items[s->top] = value;
 }
 
 int pop(Stack* s){
@@ -110,23 +107,18 @@ int pop(Stack* s){
     Decrement the top
     Return the retrieved value
     */
-
+    int retval = -1;
     if(isEmpty(s)){
         printf("Stack is empty.\n");
-        return -1;
-    }
-
-    int value = s->items[s->top];  
+    } else {
+     int value = s->items[s->top];  
     s->top--;
-    return value;
+    retval = value;
+    }
+    return retval;
 }
 
 int peek(Stack* s){
-    /*
-    Check if the stack is empty (top == -1)
-    Return the value at the top of the stack
-    */
-
     if(isEmpty(s)){
         printf("Stack is empty.\n");
         return -1;
@@ -136,7 +128,7 @@ int peek(Stack* s){
 
 int top(Stack* s){
     // Return value of top
-    return s->top;
+    return s->items[s->top];
 }
 
 void display(Stack* s){
@@ -148,8 +140,8 @@ void display(Stack* s){
 
     if(isEmpty(s)){
         printf("Stack is empty.\n");
-        return;
-    }
+        
+    } else {
     int i;
     printf("items: [");
     for(i = s->top; i >= 0; i--){
@@ -161,4 +153,5 @@ void display(Stack* s){
     printf("]\n");
     printf("top: %d\n", top(s));
     printf("value of top: %d\n", peek(s));
+    }
 }
