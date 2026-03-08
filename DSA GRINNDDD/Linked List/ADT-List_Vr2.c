@@ -38,7 +38,7 @@ int main (){
     insertPos(list, 7, 2);
     display(list);
     
-    deleteFirst(list);
+    deleteStart              (list);
     deleteLast(list);
     deletePos(list, 1);
 
@@ -80,11 +80,14 @@ void empty(List *list){
 
 void insertFirst(List *list, int data){
     Node *newNode = malloc(sizeof(Node));
+    if(newNode != NULL){
     newNode->data = data;
     newNode->next = list->head;
     list->head = newNode;
     list->count++;
 }
+    }
+   
 
 void insertLast(List *list, int data){
     Node* newNode = malloc(sizeof(Node));
@@ -135,7 +138,9 @@ void deleteStart(List *list){
 }
 
 void deleteLast(List *list){
-    if(list->count == 1){
+    if(list->count == 0){
+        printf("nothing to delete dumass");
+    } else if(list->count == 1){
         free(list->head);
         list->head = NULL;
         list->count--;
@@ -202,7 +207,7 @@ int locate(List *list, int data){
 
 void display(List *list){
     Node* current = list->head;
-    while(current->next != NULL){
+    while(current != NULL){
        printf("%d --> ", current->data);   
         current = current->next;
     }
