@@ -81,12 +81,12 @@ void empty(List *list){
 void insertFirst(List *list, int data){
     Node *newNode = malloc(sizeof(Node));
     if(newNode != NULL){
-    newNode->data = data;
-    newNode->next = list->head;
-    list->head = newNode;
-    list->count++;
-}
+        newNode->data = data;
+        newNode->next = list->head;
+        list->head = newNode;
+        list->count++;
     }
+}
    
 
 void insertLast(List *list, int data){
