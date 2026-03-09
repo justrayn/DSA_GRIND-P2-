@@ -41,7 +41,7 @@ bool isFull(Queue* q){
     return (q->front == (q->rear + 2) % MAX);
 }
 void enqueue(Queue* q, int val){
-    
+
 }
 int dequeue(Queue* q){
 
@@ -51,4 +51,4 @@ int front(Queue *q){
 }
 void display(Queue *q){
 
-}
+}   
