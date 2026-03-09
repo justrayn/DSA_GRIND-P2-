@@ -1,23 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX 10
+#define MAX 10 
 
 typedef struct {
     int items[MAX];
-    int top;
-}Stack;
+    int front;
+    int rear;
+}Queue;
 
-Stack *init();
-bool isFull(Stack* s);
-bool isEmpty(Stack s);
-void push(Stack *s, int value);
-int pop(Stack *s);
-int peek(Stack *s);
-int top(Stack *s);
-void display(Stack *s);
+Queue* init();
+bool isEmpty(Queue* q);
+bool isFull(Queue* q);
+void enqueue(Queue* q, int val);
+int dequeue(Queue* q);
+int front(Queue *q);
+void display(Queue *q);
 
 int main(){
+
 
 
 
@@ -25,36 +26,29 @@ int main(){
 }
 
 
-Stack *init(){
-    Stack *newStack = malloc(sizeof(Stack));;
-    if(newStack != NULL){
-        newStack->top = -1;
-        return newStack;
+Queue* init(){
+    Queue *newQ = malloc(sizeof(Queue));
+    if(newQ != NULL){
+        newQ->front = 0;
+        newQ->rear = -1;
+        return newQ;
     }
 }
-bool isFull(Stack* s){
-    return (s->top == MAX -1) ? true : false;
+bool isEmpty(Queue* q){
+    return (q->front == (q->rear + 1) % MAX);
 }
-bool isEmpty(Stack s){
-    return (s->top == -1) ? true : false;
+bool isFull(Queue* q){
+    return (q->front == (q->rear + 2) % MAX);
 }
-void push(Stack *s, int value){
-    if(isFull(s)){
-        printf("stack is actually full\n\n");
-    } else {
-        s->top++;
-        s->items[s->top] = value;
-    }
+void enqueue(Queue* q, int val){
+    
 }
-int pop(Stack *s){
+int dequeue(Queue* q){
 
 }
-int peek(Stack *s){
+int front(Queue *q){
 
 }
-int top(Stack *s){
-
-}
-void display(Stack *s){
+void display(Queue *q){
 
 }

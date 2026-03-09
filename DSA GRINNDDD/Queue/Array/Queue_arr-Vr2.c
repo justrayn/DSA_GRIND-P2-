@@ -132,28 +132,25 @@ int front(Queue* q){
     return q->items[q->front];
 }
 
-void display(Queue* q){
-    /*
-    Check if the queue is empty
-    Loop through the queue from front to rear and print each element
-    */
-   
-    if(isEmpty(q)){
+void display(Queue* q) {
+    if (isEmpty(q)) {
         printf("Queue is empty.\n");
         return;
     }
-    int i;
-    printf("items: [");
-    int count = (q->rear - q->front + MAX) % MAX;
- 
-    for(i = 0; i < count; i++){
-        int index = (q->front + i) % MAX;
-        printf("%d", q->items[index]);
-        if(i < count - 1){
-            printf(", ");
-        }
+
+    Queue *tempQ = initialize();
+    printf("Items: ");
+
+    while (!isEmpty(q)) {
+        int val = dequeue(q);
+        printf("%d ", val);
+        enqueue(tempQ, val);
     }
-    printf("]\n");
-    printf("front: %d\n", q->front);
-    printf("rear: %d\n", q->rear);
+    printf("\n");
+
+    // Put them back in the original queue
+    while (!isEmpty(tempQ)) {
+        enqueue(q, dequeue(tempQ));
+    }
+    free(tempQ);
 }
