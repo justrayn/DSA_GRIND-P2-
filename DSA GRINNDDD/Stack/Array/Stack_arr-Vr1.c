@@ -128,7 +128,7 @@ int peek(Stack* s){
 
 int top(Stack* s){
     // Return value of top
-    return s->items[s->top];
+    return s->top;
 }
 
 void display(Stack* s){
