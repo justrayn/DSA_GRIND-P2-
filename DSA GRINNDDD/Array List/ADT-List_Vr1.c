@@ -77,12 +77,12 @@ int main (){
             break;
 
             case 4:
-            if(L.count == MAX -1){
+            if(L.count >= MAX ){
                 printf("can't do this case its full.\n");
             } else {
             printf("doing InsertSorted\nwhat do you wanna insert?...");
             scanf("%d", &cData);
-            insertSorted (L, cData);
+            L = insertSorted (L, cData);
             }
             break;
 

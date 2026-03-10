@@ -34,7 +34,7 @@ int main (){
 
         switch(op){
             case 0:
-            exit(1);
+            exit(0);
             break;
 
             case 1:
@@ -77,21 +77,22 @@ int main (){
             break;
 
             case 4:
-            if(L.count == MAX -1){
+            if(L.count >= MAX){
                 printf("can't do this case its full.\n");
             } else {
             printf("doing InsertSorted\nwhat do you wanna insert?...");
             scanf("%d", &cData);
-            insertSorted (L, cData);
+            L = insertSorted (L, cData);
             }
             break;
 
             case 5:
             if(L.count == 0){
                 printf("nothings here...\n");
-            }
-            printf("displaying data...\n");
+            } else {
+                 printf("displaying data...\n");
             display(L);
+            }
             break;
         }
     
