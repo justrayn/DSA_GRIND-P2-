@@ -34,7 +34,7 @@ int main (){
 
         switch(op){
             case 0:
-            exit(1);
+            exit(0);
             break;
 
             case 1:
@@ -51,14 +51,9 @@ int main (){
             break;
 
             case 2:
-            if(L.count == 0){
-                printf("cant do this case. nothing is in there\n");
-            } else {
-                printf("\ndoing deletePos\n What position do you wanna delete?...");
-                scanf("%d", &cLoc);
-                L = deletePos(L, cLoc);
-            }
-            
+            printf("\ndoing deletePos\n What position do you wanna delete?...");
+            scanf("%d", &cLoc);
+            L = deletePos(L, cLoc);
             break;
         
             case 3:
@@ -67,13 +62,14 @@ int main (){
             } else {
                 printf("find what..?");
                 scanf("%d", &cLoc);
+                found = locate(L, cLoc);
+                if(found != -1){
+                    printf("wow its actually there.. in %d\n", found);
+                } else {
+                    printf("not there...\n");
+                }
             }
-            found = locate(L, cLoc);
-            if(found != -1){
-                printf("wow its actually there.. in %d\n", found);
-            } else {
-                printf("not there...\n");
-            }
+            
             break;
 
             case 4:
@@ -89,9 +85,11 @@ int main (){
             case 5:
             if(L.count == 0){
                 printf("nothings here...\n");
-            }
-            printf("displaying data...\n");
+            } else {
+                 printf("displaying data...\n");
             display(L);
+            }
+           
             break;
         }
     
