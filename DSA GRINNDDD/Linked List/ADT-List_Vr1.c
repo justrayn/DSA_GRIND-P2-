@@ -28,16 +28,100 @@ void display(List list);
 int main (){
 
     List L = initialize();
-    L = insertFirst(L, 10);
+    
+    while(1){
+        int op, cdata, cloc, found;
+        printf("\n\n--Please choose an operation--\n");
+        printf("\n0.exit program\n1.insertFirst\n2.insertLast\n3.insertPos\n4.deleteFirst\n5.deleteLast\n6.deletePos\n7.Locate\n8.diplying all i have got </3\nInput operation:");
+        scanf("%d", &op);
+        
+        switch(op){
+            case 0:
+            exit(0);
+            break;
+
+            case 1:
+            printf("\n.using the insertFirst..\n Input data to insert: ");
+            scanf("%d", &cdata);
+            L = insertFirst(L, cdata);
+            break;
+            
+            case 2:
+             printf("\n.using the insertLast..\n Input data to insert: ");
+             scanf("%d", &cdata);
+             L = insertLast(L, cdata);
+            break;
+
+            case 3:
+             printf("\n.using the insertPos..\n Input data to insert: ");
+              scanf("%d", &cdata);
+              printf("\nwhat position?(0-%d)", L.count);
+              scanf("%d", &cloc);
+              L = insertPos(L, cdata, cloc);
+            break;
+
+            case 4:
+            if(L.count == 0){
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deleteFirst..\ndeleting first data..\n");
+            L = deleteFirst(L);
+            }
+            break;
+
+            case 5:
+            if(L.count == 0){
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deleteLast..\ndeleting Last data..\n");
+             L = deleteLast(L);
+            }
+             
+            break;
+
+            case 6:
+            if(L.count == 0){
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deletePos..\nInput index of data to delete");
+            scanf("%d", &cloc);
+            L = deletePos(L, cloc);
+            }
+            
+            break;
+
+            case 7:
+            if(L.count == 0){
+                printf("\nnothing to locate im sorry...\n");
+            }  else {
+            printf("\n using Locate...\nInput data to locate..\n");
+            scanf("%d", &cloc);
+            found = locate(L, cloc);
+            if(found = -1){
+                printf("\ndata is not there..\n");
+            } else {
+                printf("\n%d is there!..\n");
+            }
+            }
+            
+            break;
+            
+
+            case 8:
+            printf("displaying data..\n");
+            display(L);
+
+        }
+    }
     
 
     return 0;
 }
 
 List initialize(){
-    List *newList;
-    newList->head = NULL;
-    newList->count = 0;
+    List newList;
+    newList.head = NULL;
+    newList.count = 0;
     return newList;
 }
 
@@ -49,9 +133,9 @@ List empty(List L){
         current = current->next;
         free(temp);
     }
-    list.head = NULL;
-    list.count = 0;
-    return list;
+    L.head = NULL;
+    L.count = 0;
+    return L;
 }
 
 List insertFirst(List list, int data){
@@ -86,9 +170,9 @@ List insertLast(List list, int data){
 List insertPos(List list, int data, int index){
     if(index <= list.count){
         if(index == 0){
-            insertFirst(list, data);
+            list =insertFirst(list, data);
         } else if(index == list.count){
-            insertLast(list, data);
+            list = insertLast(list, data);
         } else {
             Node* newNode = malloc(sizeof(Node));
             newNode->data = data;
@@ -164,19 +248,20 @@ int retrieve(List list, int index){
 }
 
 int locate(List list, int data){
-    if(list.head == NULL){
-        return -1;
-    }
-    
+
+    int retval = -1;
+    if(list.head != NULL){
     Node* current;
     int index = 0;
     for(current = list.head; current != NULL; index++){
         if(current->data == data){
-            return index;
+            retval = index;
         }
         current = current->next;
     }
-    return -1;
+    }
+    
+    return retval;
 
 }
 
