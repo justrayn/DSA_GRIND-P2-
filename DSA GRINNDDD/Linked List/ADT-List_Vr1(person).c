@@ -30,17 +30,79 @@ Person retrieve(List list, int index);
 int locate(List list, Person data);
 void display(List list);
 
-int main (){
+int main() {
     List L = initialize();
-    
-    Person p1 = {"Alice", 25};
-    Person p2 = {"Bob", 30};
-    
-    L = insertFirst(L, p1);
-    L = insertLast(L, p2);
-    
-    display(L);
+    int op, cloc, found;
+    Person tempP;
 
+    while (1) {
+        printf("\n--- Person List (Variation 1) ---");
+        printf("\n1. insertFirst\n2. insertLast\n3. insertPos\n4. deleteFirst\n5. deleteLast\n6. deletePos\n7. locate\n8. display\n0. exit");
+        printf("\nInput operation: ");
+        scanf("%d", &op);
+
+        switch (op) {
+            case 0:
+                L = empty(L); // Clean up memory before leaving
+                exit(0);
+                break;
+
+            case 1: // Insert First
+            case 2: // Insert Last
+                printf("Enter Name: ");
+                scanf("%s", tempP.name);
+                printf("Enter Age: ");
+                scanf("%d", &tempP.age);
+                
+                if (op == 1) L = insertFirst(L, tempP);
+                else L = insertLast(L, tempP);
+                break;
+
+            case 3: // Insert Pos
+                printf("Enter Name: ");
+                scanf("%s", tempP.name);
+                printf("Enter Age: ");
+                scanf("%d", &tempP.age);
+                printf("Enter Position (0-%d): ", L.count);
+                scanf("%d", &cloc);
+                L = insertPos(L, tempP, cloc);
+                break;
+
+            case 4: // Delete First
+                L = deleteFirst(L);
+                break;
+
+            case 5: // Delete Last
+                L = deleteLast(L);
+                break;
+
+            case 6: // Delete Pos
+                printf("Enter index to delete: ");
+                scanf("%d", &cloc);
+                L = deletePos(L, cloc);
+                break;
+
+            case 7: // Locate
+                printf("Enter Name to find: ");
+                scanf("%s", tempP.name);
+                printf("Enter Age to find: ");
+                scanf("%d", &tempP.age);
+                found = locate(L, tempP);
+                if (found != -1) {
+                    printf("Found %s at index %d\n", tempP.name, found);
+                } else {
+                    printf("Person not found.\n");
+                }
+                break;
+
+            case 8: // Display
+                display(L);
+                break;
+
+            default:
+                printf("Invalid operation.\n");
+        }
+    }
     return 0;
 }
 
