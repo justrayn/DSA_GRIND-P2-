@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
 #define MAX 10
 
@@ -16,60 +19,85 @@ void display(List L);
 
 int main (){
     List L = initialize(L);
-    int position, data, operation;
-    L.elem[0] = 1;
-    L.elem[1] = 3;
-    L.elem[2] = 2;
-    L.elem[3] = 5;
-    L.count = 4;
-    do {
-    printf("\n1: Insert\n");
-    printf("2: Delete\n");
-    printf("3: Locate\n");
-    printf("4: InsertSorted\n");
-    printf("0: Exit\n");
-    printf("Enter operation: ");
-    scanf("%d", &operation);
-    switch (operation){
-        case 0:
-            return 0;
-        break;
-        case 1:
-        //Insert
-        L = insertPos (L, 4, 2);
-        //Display
-        display(L);
-        printf("\nCount: %d\n", L.count);
-        break;
-        case 2:   
-        //Delete
-        L = deletePos(L, 1);
-        //Display
-        display(L);
-        printf("\nCount: %d\n", L.count);
-        break;
-        case 3:
-        //Locate
-        int location = locate(L, 1);
-        if(location != -1){
-            printf("Data is found at index %d\n", location);
-        } else {
-            printf("Data is not Found!\n");
-        }
-        //Display
-        display(L);
-        printf("\nCount: %d\n", L.count);
-        break;
-        case 4:
-        // Insert Sorted
-        L = insertSorted (L, 8);
-        //Display
-        display(L);
-        printf("\nCount: %d\n", L.count);
-        break;
-    }
-    } while (operation != 0);
 
+    while(1){
+        int op, cData, cLoc, found;
+        printf("\nplease choose what kind of operation...\n\n");
+        printf("\n1: Insert\n");
+        printf("2: Delete\n");
+        printf("3: Locate\n");
+        printf("4: InsertSorted\n");
+        printf("5: Show\n");
+        printf("0: Exit\n");
+        printf("Enter operation: ");
+        scanf("%d", &op);
+
+        switch(op){
+            case 0:
+            exit(1);
+            break;
+
+            case 1:
+            if(L.count >= MAX){
+                printf("can't do this case its full.\n");
+            } else {
+            printf("what do you wanna insert?...(just numbers plzplzplzpx)");
+            scanf("%d", &cData);
+            printf("and Where do you wanna put it?(0-%d)", L.count);
+            scanf("%d", &cLoc);
+            L = insertPos(L, cData, cLoc);
+            }
+
+            break;
+
+            case 2:
+            if(L.count == 0){
+                printf("cant do this case. nothing is in there\n");
+            } else {
+                printf("\ndoing deletePos\n What position do you wanna delete?...");
+                scanf("%d", &cLoc);
+                L = deletePos(L, cLoc);
+            }
+            
+            break;
+        
+            case 3:
+             if(L.count == 0){
+                printf("cant do this case. nothing is in there\n");
+            } else {
+                printf("find what..?");
+                scanf("%d", &cLoc);
+            }
+            found = locate(L, cLoc);
+            if(found != -1){
+                printf("wow its actually there.. in %d\n", found);
+            } else {
+                printf("not there...\n");
+            }
+            break;
+
+            case 4:
+            if(L.count == MAX -1){
+                printf("can't do this case its full.\n");
+            } else {
+            printf("doing InsertSorted\nwhat do you wanna insert?...");
+            scanf("%d", &cData);
+            insertSorted (L, cData);
+            }
+            break;
+
+            case 5:
+            if(L.count == 0){
+                printf("nothings here...\n");
+            }
+            printf("displaying data...\n");
+            display(L);
+            break;
+        }
+    
+
+
+    }
     return 0;
 }
 
