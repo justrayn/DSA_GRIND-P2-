@@ -14,7 +14,6 @@ typedef struct {
 
 // Variation 2
 List* initialize();
-List* initializeV2();
 void empty(List *list);
 void insertFirst(List *list, int data);
 void insertLast(List *list, int data);
@@ -130,10 +129,12 @@ void insertPos(List *list, int data, int index){
 }
 
 void deleteStart(List *list){
-    Node* current = list->head;
-    list->head = list->head->next;
-    free(current);
-    list->count--;
+    if(list->head != NULL){
+        Node* current = list->head;
+        list->head = list->head->next;
+        free(current);
+        list->count--;
+    }
      
 }
 
