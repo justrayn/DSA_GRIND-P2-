@@ -38,15 +38,15 @@ List initialize(){
     List *newList;
     newList->head = NULL;
     newList->count = 0;
-    return *newList;
+    return newList;
 }
 
 List empty(List L){
-    Node *current = list.head;
+    Node *current = L.head;
     Node *temp;
     while(current != NULL){
         temp = current;
-        current = current.next;
+        current = current->next;
         free(temp);
     }
     list.head = NULL;
@@ -74,7 +74,7 @@ List insertLast(List list, int data){
         
     } else {
         Node* current = list.head;
-        while(current != NULL){
+        while(current->next != NULL){
             current = current->next;
         }
         current->next = newNode;
@@ -144,7 +144,7 @@ List deletePos(List list, int index){
     Node* temp = current->next;
     current->next = temp->next;
     free(temp);
-    list.count++;
+    list.count--;
     return list;
 
 }
@@ -170,7 +170,7 @@ int locate(List list, int data){
     
     Node* current;
     int index = 0;
-    for(current = list.head; current->next != NULL; index++){
+    for(current = list.head; current != NULL; index++){
         if(current->data == data){
             return index;
         }
