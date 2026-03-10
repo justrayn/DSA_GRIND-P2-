@@ -26,27 +26,93 @@ int locate(List *list, int data);
 void display(List *list);
 
 int main (){
-
-    List *list = initialize();
-    insertLast(list, 2);
-    insertLast(list, 6);
-    insertLast(list, 5);
-
-    insertFirst(list, 7);
-    insertLast(list, 7);
-    insertPos(list, 7, 2);
-    display(list);
+ List *L = initialize();
     
-    deleteStart              (list);
-    deleteLast(list);
-    deletePos(list, 1);
+    while(1){
+        int op, cdata, cloc, found;
+        printf("\n\n--Please choose an operation--\n");
+        printf("\n0.exit program\n1.insertFirst\n2.insertLast\n3.insertPos\n4.deleteFirst\n5.deleteLast\n6.deletePos\n7.Locate\n8.diplying all i have got </3\nInput operation:");
+        scanf("%d", &op);
+        
+        switch(op){
+            case 0:
+            exit(0);
+            break;
 
-    printf("Retrieved index 1: %d\n", retrieve(list, 1));
-    printf("Locate data 6: %d\n", locate(list, 6));
-    printf("After Deleting: ");
-    display(list);
-    empty(list);
+            case 1:
+            printf("\n.using the insertFirst..\n Input data to insert: ");
+            scanf("%d", &cdata);
+            insertFirst(L, cdata);
+            break;
+            
+            case 2:
+             printf("\n.using the insertLast..\n Input data to insert: ");
+             scanf("%d", &cdata);
+             insertLast(L, cdata);
+            break;
 
+            case 3:
+             printf("\n.using the insertPos..\n Input data to insert: ");
+              scanf("%d", &cdata);
+              printf("\nwhat position?(0-%d)", L->count);
+              scanf("%d", &cloc);
+              insertPos(L, cdata, cloc);
+            break;
+
+            case 4:
+            if(L->count == 0){
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deleteFirst..\ndeleting first data..\n");
+            deleteStart(L);
+            }
+            break;
+
+            case 5:
+            if(L->count == 0){
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deleteLast..\ndeleting Last data..\n");
+             deleteLast(L);
+            }
+             
+            break;
+
+            case 6:
+            if(L->count == 0){
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deletePos..\nInput index of data to delete");
+            scanf("%d", &cloc);
+            deletePos(L, cloc);
+            }
+            
+            break;
+
+            case 7:
+            if(L->count == 0){
+                printf("\nnothing to locate im sorry...\n");
+            }  else {
+            printf("\n using Locate...\nInput data to locate..\n");
+            scanf("%d", &cloc);
+            found = locate(L, cloc);
+            if(found == -1){
+                printf("\ndata is not there..\n");
+            } else {
+                printf("\n%d is there!..\n", cloc);
+            }
+            }
+            
+            break;
+            
+
+            case 8:
+            printf("displaying data..\n");
+            display(L);
+
+        }
+    }
+    
     return 0;
 }
 
@@ -160,7 +226,10 @@ void deleteLast(List *list){
 }
 
 void deletePos(List *list, int index){
-    if(index == 0){
+    if(index >= list->count || index < 0){
+        printf("invalid\n");
+    }
+    else if(index == 0){
         deleteStart(list);
     } else {
         Node* current = list->head;

@@ -100,7 +100,7 @@ int main (){
             if(found = -1){
                 printf("\ndata is not there..\n");
             } else {
-                printf("\n%d is there!..\n");
+                printf("\n%d is there!..\n", cloc);
             }
             }
             
@@ -216,7 +216,7 @@ List deleteLast(List list){
 }
 
 List deletePos(List list, int index){
-    if(index == 0){
+    if(index == 0 ){
         deleteFirst(list);
         return list;
     }
