@@ -27,58 +27,105 @@ int main (){
     EPtr L = (EPtr)malloc(sizeof(Etype));
     initialize(L);
 
-    // Initializing with Person data
-    strcpy(L->elem[0].name, "Alice"); L->elem[0].age = 20;
-    strcpy(L->elem[1].name, "Bob");   L->elem[1].age = 25;
-    L->count = 2;
+    while(1){
 
-    int operation;
-    do {
-        printf("\n1: Insert\n");
+        int op, cLoc, found;
+        Person p;
+
+        printf("\nplease choose what kind of operation...\n\n");
+        printf("1: Insert\n");
         printf("2: Delete\n");
         printf("3: Locate\n");
         printf("4: InsertSorted\n");
+        printf("5: Show\n");
         printf("0: Exit\n");
+
         printf("Enter operation: ");
-        scanf("%d", &operation);
+        scanf("%d", &op);
 
-        Person p1 = {"Dave", 22};
-        Person p2 = {"Eve", 28};
+        switch(op){
 
-        switch (operation){
-            case 0:
-                makeNULL(L); // Using your function to free memory
-                return 0;
-            case 1:
-                insertPos(L, p1, 1);
-                display(L);
-                printf("\nCount: %d\n", L->count);
-                break;
-            case 2:
-                deletePos(L, 1);
-                display(L);
-                printf("\nCount: %d\n", L->count);
-                break;
-            case 3: {
-                // Locating based on the p1 struct
-                int location = locate(L, p1);
-                if(location != -1){
-                    printf("Data found at index %d\n", location);
-                } else {
-                    printf("Data not Found!\n");
-                }
-                display(L);
-                break;
+        case 0:
+            makeNULL(L);
+            exit(0);
+
+        case 1:
+            if(L->count >= MAX){
+                printf("Can't insert. List is full.\n");
+            }else{
+
+                printf("Enter name: ");
+                scanf("%s", p.name);
+
+                printf("Enter age: ");
+                scanf("%d", &p.age);
+
+                printf("Enter position (0-%d): ", L->count);
+                scanf("%d", &cLoc);
+
+                insertPos(L, p, cLoc);
             }
-            case 4:
-                insertSorted(L, p2);
-                display(L);
-                printf("count: %d\n", L->count);
-                break;
-        }
-    } while (operation != 0);
-}
+        break;
 
+        case 2:
+            if(L->count == 0){
+                printf("Nothing to delete.\n");
+            }else{
+
+                printf("Enter position to delete: ");
+                scanf("%d", &cLoc);
+
+                deletePos(L, cLoc);
+            }
+        break;
+
+        case 3:
+            if(L->count == 0){
+                printf("List is empty.\n");
+            }else{
+
+                printf("Enter age to locate: ");
+                scanf("%d", &p.age);
+
+                found = locate(L, p);
+
+                if(found != -1){
+                    printf("Person found at index %d\n", found);
+                }else{
+                    printf("Person not found.\n");
+                }
+            }
+        break;
+
+        case 4:
+            if(L->count >= MAX){
+                printf("List is full.\n");
+            }else{
+
+                printf("Enter name: ");
+                scanf("%s", p.name);
+
+                printf("Enter age: ");
+                scanf("%d", &p.age);
+
+                insertSorted(L, p);
+            }
+        break;
+
+        case 5:
+            if(L->count == 0){
+                printf("Nothing here...\n");
+            }else{
+                printf("Displaying data...\n");
+                display(L);
+            }
+        break;
+
+        default:
+            printf("Invalid option.\n");
+        }
+    }
+}
 void initialize(EPtr L){ 
     L->count = 0; 
 }

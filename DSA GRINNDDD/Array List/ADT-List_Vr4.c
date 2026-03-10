@@ -17,22 +17,93 @@ void insertSorted(List *L, int data);
 void display(List *L);
 void resize(List *L);
 void makeNULL(List *L);
-
 int main (){
     List L;
     initialize(&L);
 
-    insertSorted(&L, 5);
-    insertSorted(&L, 2);
-    insertSorted(&L, 8);
-    insertSorted(&L, 1);
+    while(1){
 
-    display(&L);
+        int op, cData, cLoc, found;
 
-    makeNULL(&L);
+        printf("\nplease choose what kind of operation...\n\n");
+        printf("1: Insert\n");
+        printf("2: Delete\n");
+        printf("3: Locate\n");
+        printf("4: InsertSorted\n");
+        printf("5: Show\n");
+        printf("0: Exit\n");
+
+        printf("Enter operation: ");
+        scanf("%d", &op);
+
+        switch(op){
+
+        case 0:
+            makeNULL(&L);
+            exit(0);
+
+        case 1:
+            printf("What do you want to insert?: ");
+            scanf("%d", &cData);
+
+            printf("Where do you want to put it? (0-%d): ", L.count);
+            scanf("%d", &cLoc);
+
+            insertPos(&L, cData, cLoc);
+        break;
+
+        case 2:
+            if(L.count == 0){
+                printf("Nothing to delete.\n");
+            }else{
+                printf("Enter position to delete: ");
+                scanf("%d", &cLoc);
+
+                deletePos(&L, cLoc);
+            }
+        break;
+
+        case 3:
+            if(L.count == 0){
+                printf("List is empty.\n");
+            }else{
+
+                printf("Find what?: ");
+                scanf("%d", &cData);
+
+                found = locate(&L, cData);
+
+                if(found != -1){
+                    printf("Wow its actually there.. in %d\n", found);
+                }else{
+                    printf("Not there...\n");
+                }
+            }
+        break;
+
+        case 4:
+            printf("What do you want to insert?: ");
+            scanf("%d", &cData);
+
+            insertSorted(&L, cData);
+        break;
+
+        case 5:
+            if(L.count == 0){
+                printf("Nothing here...\n");
+            }else{
+                printf("Displaying data...\n");
+                display(&L);
+            }
+        break;
+
+        default:
+            printf("Invalid option.\n");
+        }
+    }
+
     return 0;
 }
-
 void initialize(List *L){
     L->elemPtr = malloc(sizeof(int) * LENGTH);
     L->max = LENGTH;

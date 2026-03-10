@@ -24,23 +24,102 @@ void display(List *L);
 void resize(List *L);
 void makeNULL(List *L);
 
+
 int main (){
     List L;
     initialize(&L);
 
-    Person p1 = {"Alice", 25};
-    Person p2 = {"Bob", 20};
-    Person p3 = {"Charlie", 30};
-    Person p4 = {"Diana", 22};
+    while(1){
 
-    insertSorted(&L, p1);
-    insertSorted(&L, p2);
-    insertSorted(&L, p3);
-    insertSorted(&L, p4);
+        int op, cLoc, found;
+        Person p;
 
-    display(&L);
+        printf("\nplease choose what kind of operation...\n\n");
+        printf("1: Insert\n");
+        printf("2: Delete\n");
+        printf("3: Locate\n");
+        printf("4: InsertSorted\n");
+        printf("5: Show\n");
+        printf("0: Exit\n");
 
-    makeNULL(&L);
+        printf("Enter operation: ");
+        scanf("%d", &op);
+
+        switch(op){
+
+        case 0:
+            makeNULL(&L);
+            exit(0);
+
+        case 1:
+            printf("Enter name: ");
+            scanf("%s", p.name);
+
+            printf("Enter age: ");
+            scanf("%d", &p.age);
+
+            printf("Enter position (0-%d): ", L.count);
+            scanf("%d", &cLoc);
+
+            insertPos(&L, p, cLoc);
+        break;
+
+        case 2:
+            if(L.count == 0){
+                printf("Nothing to delete.\n");
+            }else{
+                printf("Enter position to delete: ");
+                scanf("%d", &cLoc);
+
+                deletePos(&L, cLoc);
+            }
+        break;
+
+        case 3:
+            if(L.count == 0){
+                printf("List is empty.\n");
+            }else{
+
+                printf("Enter name: ");
+                scanf("%s", p.name);
+
+                printf("Enter age: ");
+                scanf("%d", &p.age);
+
+                found = locate(&L, p);
+
+                if(found != -1){
+                    printf("Person found at index %d\n", found);
+                }else{
+                    printf("Person not found.\n");
+                }
+            }
+        break;
+
+        case 4:
+            printf("Enter name: ");
+            scanf("%s", p.name);
+
+            printf("Enter age: ");
+            scanf("%d", &p.age);
+
+            insertSorted(&L, p);
+        break;
+
+        case 5:
+            if(L.count == 0){
+                printf("Nothing here...\n");
+            }else{
+                printf("Displaying data...\n");
+                display(&L);
+            }
+        break;
+
+        default:
+            printf("Invalid option.\n");
+        }
+    }
+
     return 0;
 }
 
