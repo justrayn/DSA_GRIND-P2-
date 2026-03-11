@@ -80,8 +80,8 @@ int main (){
                 printf("List is empty.\n");
             }else{
 
-                printf("Enter age to locate: ");
-                scanf("%d", &p.age);
+               printf("Enter name to locate: ");
+                scanf("%s", p.name);
 
                 found = locate(L, p);
 
