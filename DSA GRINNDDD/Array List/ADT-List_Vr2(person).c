@@ -83,10 +83,8 @@ int main (){
             if(L->count == 0){
                 printf("List is empty.\n");
             }else{
-
-                printf("Enter age to locate: ");
-                scanf("%d", &p.age);
-
+printf("Enter name to locate: ");
+scanf("%s", p.name);
                 found = locate(L, p);
 
                 if(found != -1){
@@ -156,14 +154,15 @@ void deletePos(EPtr L, int position){
 int locate(EPtr L, Person data){
     int i;
     int found = -1;
-    // Cannot compare structs directly; comparing by age
-    for(i = 0; i < L->count && L->elem[i].age != data.age; i++){}
-    if( i < L->count){
+
+    for(i = 0; i < L->count && strcmp(L->elem[i].name, data.name) != 0; i++){}
+
+    if(i < L->count){
         found = i;
     }
+
     return found;
 }
-
 Person retrieve(EPtr L, int position){
     Person dummy = {"None", -1}; // Return dummy if out of bounds
     if(position < L->count && position >= 0){
