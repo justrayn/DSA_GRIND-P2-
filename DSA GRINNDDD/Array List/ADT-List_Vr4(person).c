@@ -79,15 +79,12 @@ int main (){
             if(L.count == 0){
                 printf("List is empty.\n");
             }else{
-
-                printf("Enter name: ");
+        
+                printf("Enter name to locate: ");
                 scanf("%s", p.name);
-
-                printf("Enter age: ");
-                scanf("%d", &p.age);
-
+        
                 found = locate(&L, p);
-
+        
                 if(found != -1){
                     printf("Person found at index %d\n", found);
                 }else{
@@ -162,14 +159,15 @@ void deletePos(List *L, int position){
 int locate(List *L, Person data){
     int i;
     int found = -1;
-    // Compares age and name for equality
-    for(i = 0; i < L->count && (L->elemPtr[i].age != data.age || strcmp(L->elemPtr[i].name, data.name) != 0); i++){}
+
+    for(i = 0; i < L->count && strcmp(L->elemPtr[i].name, data.name) != 0; i++){}
+
     if(i < L->count){
         found = i;
     }
+
     return found;
 }
-
 Person retrieve(List *L, int position){
     Person dummy = {"None", -1};
     if(position >= L->count || position < 0){
