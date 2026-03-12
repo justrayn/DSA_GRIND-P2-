@@ -135,12 +135,8 @@ List deletePos(List L, int position){
 
 int locate (List L, int data){
     int i;
-    int found = -1;
     for(i = 0; i < L.count && L.elem[i] != data; i++){}
-    if( i < L.count){
-        found = i;
-    }
-    return found;
+    return (i < L.count) ? i : -1;
 }
 
 List insertSorted (List L, int data){
