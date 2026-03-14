@@ -150,17 +150,9 @@ void deletePos(EPtr L, int position){
 }
 
 int locate(EPtr L, int data){
-
     int i;
-    int found = -1;
-
     for(i = 0; i < L->count && L->elem[i] != data; i++){}
-
-    if(i < L->count){
-        found = i;
-    }
-
-    return found;
+    return (i < l->count) ? i : -1;
 }
 
 int retrieve(EPtr L, int position){
