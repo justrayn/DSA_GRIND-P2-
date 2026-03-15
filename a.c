@@ -1,66 +1,66 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
 
 #define MAX 10
 
 typedef struct {
-    int elems[MAX];
-    int count;
-}NodeType, *NodePtr;
+    int item[MAX];
+    int top;
+} Stack;
 
-void init(NodePtr l);
-void insertPos(NodePtr l, int data, int pos);
-void deletePos(NodePtr l, int pos);
-void insertSorted(NodePtr l, int data);
-void makeNULL(NodePtr l);
+// Function Prototypes
+Stack *init(); 
+void push(Stack *s, int data);
+int pop(Stack *s);
+int peek(Stack *s);
+void display(Stack *s);
 
-int main(){
-
-
-
-
+int main() {
+    Stack *s = init();
+    push(s, 10);
+    push(s, 20);
+    push(s, 30);
+    
+    display(s); // Should show 30, 20, 10
+    
     return 0;
 }
 
-void init(NodePtr l){
-    l->count = 0;
+Stack *init() {
+    Stack *s = malloc(sizeof(Stack));
+    if (s != NULL) {
+        s->top = -1;
+    }
+    return s;
 }
-void insertPos(NodePtr l, int data, int pos){
-    if(pos < 0 || pos > l->count || l->count >= MAX){
-        printf("invalid!\n");
+
+void push(Stack *s, int data) {
+    if (s->top < MAX - 1) { // Fixed: prevent overflow
+        s->item[++(s->top)] = data;
     } else {
-        for(int i = l->count ; i > pos ; i--){
-            l->elems[i] = l->elems[i - 1];
-        }
-        l->count++;
-        l->elems[pos] = data;
+        printf("Stack Overflow\n");
     }
 }
-void deletePos(NodePtr l, int pos){
-    if(pos < 0 || pos > l->count) {
-        printf("invalid!\n");
-    } else if(l->count == 0){
-        printf("theres nothing to delete..\n");
-    } else {
-        for(int i = pos;i < l->count - 1;i++){
-            l->elems[i] = l->elemx[i + 1];
-        }
-        l->count--;
-    }
+
+int pop(Stack *s) {
+    if (s->top == -1) return -1;
+    return s->item[(s->top)--]; // Decrement after returning
 }
-void insertSorted(NodePtr l, int data)[
-    if(l->count >= MAX){
-        printf("invalid!\n");
-    } else {
-        for(int i = l->count - 1 ; i >= 0 && l->elems[i] > data ; i--){
-            l->elems[i + 1] = l->elems[i];
-        }
-        l->count++;
-        l->elems[i + 1] = data;
+
+int peek(Stack *s) {
+    if (s->top == -1) return -1;
+    return s->item[s->top];
+}
+
+void display(Stack *s) {
+    if (s->top == -1) {
+        printf("Stack is empty.\n");
+        return;
     }
-]
-void makeNULL(NodePtr l){
-    free(l);
+    printf("Stack (Top to Bottom):\n");
+    // We just iterate backwards through the array
+    for (int i = s->top; i >= 0; i--) {
+        printf("| %d |\n", s->item[i]);
+    }
+    printf("-----\n");
 }
