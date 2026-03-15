@@ -131,27 +131,30 @@ int top(Stack* s){
     return s->top;
 }
 
-void display(Stack* s){
-    /*
-    Check if the stack is empty (top == -1)
-    Iterate from the top of the stack down to the bottom (index 0)
-    Print each element
-    */
-
-    if(isEmpty(s)){
-        printf("Stack is empty.\n");
+void display(Stack *s) {
+    // 1. Initialize the temporary stack correctly
+    Stack *temp = init(); 
+    
+    if (s->top != -1) {
+        printf("Stack contents:\n");
         
-    } else {
-    int i;
-    printf("items: [");
-    for(i = s->top; i >= 0; i--){
-        printf("%d", s->items[i]);
-        if(i > 0){
-            printf(", ");
+        // 2. Move from S to TEMP to see items
+        // We use a while loop because s->top changes
+        while (s->top != -1) {
+            int current = peek(s);
+            printf("| %d |\n", current);
+            push(temp, pop(s));
         }
+        printf("-----\n");
+
+        // 3. Move items BACK from TEMP to S to restore the stack
+        while (temp->top != -1) {
+            push(s, pop(temp));
+        }
+    } else {
+        printf("Stack is empty.\n");
     }
-    printf("]\n");
-    printf("top: %d\n", top(s));
-    printf("value of top: %d\n", peek(s));
-    }
+    
+    // Clean up the temporary stack memory
+    free(temp);
 }

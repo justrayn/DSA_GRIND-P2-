@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #define MAX 10
-
 typedef struct {
     int item[MAX];
     int top;
@@ -20,9 +19,9 @@ int main() {
     push(s, 10);
     push(s, 20);
     push(s, 30);
-    
-    display(s); // Should show 30, 20, 10
-    
+
+    display(s);
+
     return 0;
 }
 
@@ -35,32 +34,54 @@ Stack *init() {
 }
 
 void push(Stack *s, int data) {
-    if (s->top < MAX - 1) { // Fixed: prevent overflow
-        s->item[++(s->top)] = data;
-    } else {
-        printf("Stack Overflow\n");
+    // MAX - 1 ensures we don't go out of bounds (0-9)
+    if (s->top < MAX - 1) {
+        s->top++;
+        s->item[s->top] = data;
     }
 }
 
 int pop(Stack *s) {
-    if (s->top == -1) return -1;
-    return s->item[(s->top)--]; // Decrement after returning
+    int val = -1; // Single return variable
+    if (s->top != -1) {
+        val = s->item[s->top];
+        s->top--;
+    }
+    return val;
 }
 
 int peek(Stack *s) {
-    if (s->top == -1) return -1;
-    return s->item[s->top];
+    int val = -1; // Single return variable
+    if (s->top != -1) {
+        val = s->item[s->top];
+    }
+    return val;
 }
 
 void display(Stack *s) {
-    if (s->top == -1) {
+    // 1. Initialize the temporary stack correctly
+    Stack *temp = init(); 
+    
+    if (s->top != -1) {
+        printf("Stack contents:\n");
+        
+        // 2. Move from S to TEMP to see items
+        // We use a while loop because s->top changes
+        while (s->top != -1) {
+            int current = peek(s);
+            printf("| %d |\n", current);
+            push(temp, pop(s));
+        }
+        printf("-----\n");
+
+        // 3. Move items BACK from TEMP to S to restore the stack
+        while (temp->top != -1) {
+            push(s, pop(temp));
+        }
+    } else {
         printf("Stack is empty.\n");
-        return;
     }
-    printf("Stack (Top to Bottom):\n");
-    // We just iterate backwards through the array
-    for (int i = s->top; i >= 0; i--) {
-        printf("| %d |\n", s->item[i]);
-    }
-    printf("-----\n");
+    
+    // Clean up the temporary stack memory
+    free(temp);
 }
