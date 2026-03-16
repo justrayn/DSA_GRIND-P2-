@@ -43,29 +43,50 @@ The goal of this repository is to:
 This serves as a personal reference and learning archive for improving problem-solving skills in DSA.
 
 
-Steps to Run a.c
+## Running the Test File (`a.c`) in VS Code
 
-Open the repository in VS Code
+The file `a.c` is used as a temporary testing environment for experimenting with code snippets before integrating them into the main folders.
 
-Open the integrated terminal
+### Prerequisites
 
-Terminal → New Terminal
+Make sure you have the following installed:
 
-Compile the file
+* **VS Code**
+* **C/C++ Extension (by Microsoft)**
+* **GCC Compiler** (via MinGW on Windows or GCC on Linux/macOS)
 
-gcc a.c -o a
+### Steps to Run `a.c`
 
-Run the executable
+1. **Open the repository in VS Code**
 
-On Windows
+2. **Open the integrated terminal**
 
-./a
+   ```
+   Terminal → New Terminal
+   ```
 
-On Linux / macOS
+3. **Compile the file**
 
-./a
-Notes
+   ```
+   gcc a.c -o a
+   ```
 
-a.c is intended only for quick testing.
+4. **Run the executable**
 
-Stable or reusable implementations are moved into their respective folders (Array List, Stack, Queue, etc.).
+   On **Windows**
+
+   ```
+   ./a
+   ```
+
+   On **Linux / macOS**
+
+   ```
+   ./a
+   ```
+
+### Notes
+
+* `a.c` is intended only for quick testing.
+* Stable or reusable implementations are moved into their respective folders (Array List, Stack, Queue, etc.).
+
