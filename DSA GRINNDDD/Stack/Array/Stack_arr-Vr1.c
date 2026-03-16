@@ -101,19 +101,11 @@ void push(Stack* s, int value){
 }
 
 int pop(Stack* s){
-    /*
-    Check if the stack is empty
-    Get the value at the current top of the stack
-    Decrement the top
-    Return the retrieved value
-    */
     int retval = -1;
-    if(isEmpty(s)){
-        printf("Stack is empty.\n");
-    } else {
-     int value = s->items[s->top];  
-    s->top--;
-    retval = value;
+    if(!isEmpty(s)){
+    int value = s->items[s->top];  
+        s->top--;
+        retval = value;
     }
     return retval;
 }
