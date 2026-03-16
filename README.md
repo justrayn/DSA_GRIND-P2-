@@ -41,3 +41,31 @@ The goal of this repository is to:
 * Track solutions to various algorithmic problems encountered during learning
 
 This serves as a personal reference and learning archive for improving problem-solving skills in DSA.
+
+
+Steps to Run a.c
+
+Open the repository in VS Code
+
+Open the integrated terminal
+
+Terminal → New Terminal
+
+Compile the file
+
+gcc a.c -o a
+
+Run the executable
+
+On Windows
+
+./a
+
+On Linux / macOS
+
+./a
+Notes
+
+a.c is intended only for quick testing.
+
+Stable or reusable implementations are moved into their respective folders (Array List, Stack, Queue, etc.).
