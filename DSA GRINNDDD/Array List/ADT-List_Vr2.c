@@ -16,6 +16,8 @@ int retrieve(EPtr L, int position);
 void insertSorted(EPtr L, int data);
 void display(EPtr L);
 void makeNULL(EPtr L);
+void bubbleSort(EPtr l);
+
 
 int main (){
     EPtr L = (EPtr)malloc(sizeof(Etype));
@@ -152,7 +154,7 @@ void deletePos(EPtr L, int position){
 int locate(EPtr L, int data){
     int i;
     for(i = 0; i < L->count && L->elem[i] != data; i++){}
-    return (i < l->count) ? i : -1;
+    return (i < L->count) ? i : -1;
 }
 
 int retrieve(EPtr L, int position){
@@ -197,4 +199,17 @@ void display(EPtr L){
 
 void makeNULL(EPtr L){
     free(L);
+}
+
+void bubbleSort(EPtr l){
+    int temp;
+    for(int i = 0; i < l->count - 1;i++){
+        for(int j = 0; j < l->count - i - 1;j++){
+            if(l->elem[j] > l->elem[j+1]){
+                temp = l->elem[j];
+                l->elem[j] = l->elem[j + 1];
+                l->elem[j + 1] = temp;
+            }
+        }
+    }
 }

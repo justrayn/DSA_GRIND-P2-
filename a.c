@@ -1,77 +1,215 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
 
 #define MAX 10
 
 typedef struct {
-    int elems[MAX];
-    int top;
-}Stack;
+    int elem[MAX];
+    int count;
+} Etype, *EPtr;
 
-Stack *init();
-void push(Stack *s, int data);
-int pop(Stack *s);
-int peek(Stack *s);
-bool isFull(Stack *s);
-bool isEmpty(Stack *s);
-void display(Stack *s);
+void initialize(EPtr L);
+void insertPos(EPtr L, int data, int position);
+void deletePos(EPtr L, int position);
+int locate(EPtr L, int data);
+int retrieve(EPtr L, int position);
+void insertSorted(EPtr L, int data);
+void display(EPtr L);
+void makeNULL(EPtr L);
+void bubbleSort(EPtr l);
 
 
-int main(){
+int main (){
+    EPtr L = (EPtr)malloc(sizeof(Etype));
+    initialize(L);
 
-    Stack *s = init();
-    push(s, 10);
-    push(s, 11);
-    push(s, 12);
-    display(s);
+    while(1){
+
+        int op, cData, cLoc, found;
+
+        printf("\nplease choose what kind of operation...\n\n");
+        printf("1: Insert\n");
+        printf("2: Delete\n");
+        printf("3: Locate\n");
+        printf("4: InsertSorted\n");
+        printf("5: Show\n");
+        printf("0: Exit\n");
+
+        printf("Enter operation: ");
+        scanf("%d", &op);
+
+        switch(op){
+
+        case 0:
+            free(L);
+            exit(0);
+
+        case 1:
+            if(L->count >= MAX){
+                printf("Can't insert. List is full.\n");
+            }else{
+
+                printf("What do you want to insert?: ");
+                scanf("%d", &cData);
+
+                printf("Where do you want to put it? (0-%d): ", L->count);
+                scanf("%d", &cLoc);
+
+                insertPos(L, cData, cLoc);
+            }
+        break;
+
+        case 2:
+            if(L->count == 0){
+                printf("Nothing to delete.\n");
+            }else{
+
+                printf("What position do you want to delete?: ");
+                scanf("%d", &cLoc);
+
+                deletePos(L, cLoc);
+            }
+        break;
+
+        case 3:
+            if(L->count == 0){
+                printf("List is empty.\n");
+            }else{
+
+                printf("Find what?: ");
+                scanf("%d", &cData);
+
+                found = locate(L, cData);
+
+                if(found != -1){
+                    printf("Wow its actually there.. in %d\n", found);
+                }else{
+                    printf("Not there...\n");
+                }
+            }
+        break;
+
+        case 4:
+            if(L->count >= MAX){
+                printf("List is full.\n");
+            }else{
+
+                printf("What do you want to insert?: ");
+                scanf("%d", &cData);
+
+                insertSorted(L, cData);
+            }
+        break;
+
+        case 5:
+            if(L->count == 0){
+                printf("Nothing here...\n");
+            }else{
+                printf("Displaying data...\n");
+                display(L);
+            }
+        break;
+
+        default:
+            printf("Invalid option.\n");
+        }
+    }
 
     return 0;
 }
 
-Stack *init(){
-    Stack *s = malloc(sizeof(Stack));
-    if(s != NULL){
-        s->top = -1;
-    }
-    return s;
+void initialize(EPtr L){
+    L->count = 0;
 }
 
-int peek(Stack *s){
-    return (s->top != -1) ? s->elems[s->top] : -1;
-}
-void push(Stack *s, int data){
-    if(s->top == MAX -1){
-        printf("don't force it!!");
+void insertPos(EPtr L, int data, int position){
+
+    if(position < 0 || position > L->count || L->count >= MAX){
+        printf("Invalid Position!\n");
     } else {
-        s->top++;
-        s->elems[s->top] = data;
+
+        for(int i = L->count; i > position; i--){
+            L->elem[i] = L->elem[i - 1];
+        }
+
+        L->elem[position] = data;
+        L->count++;
     }
 }
-int pop(Stack *s){
-    int item = -1;
-    if(peek(s) != -1){
-        item = s->elems[s->top];
-        s->top--;
+
+void deletePos(EPtr L, int position){
+
+    if(position < 0 || position >= L->count){
+        printf("Invalid Position!\n");
+    } else {
+
+        for(int i = position; i < L->count - 1; i++){
+            L->elem[i] = L->elem[i + 1];
+        }
+
+        L->count--;
     }
-   return item;
 }
-bool isFull(Stack *s){
-    return (s->top == MAX -1) ? true : false;
+
+int locate(EPtr L, int data){
+    int i;
+    for(i = 0; i < L->count && L->elem[i] != data; i++){}
+    return (i < L->count) ? i : -1;
 }
-bool isEmpty(Stack *s){
-    return (s->top == -1) ? true : false;
-}
-void display(Stack *s){
-    Stack *temp = init();
-    while(s->top != -1){
-        int curr = peek(s);
-        printf("%d\n", curr);
-        push(temp, pop(s));
+
+int retrieve(EPtr L, int position){
+
+    int data = -10000000;
+
+    if(position >= 0 && position < L->count){
+        data = L->elem[position];
     }
 
-    while(temp->top != -1){
-        push(s, pop(temp));
+    return data;
+}
+
+void insertSorted(EPtr L, int data){
+
+    if(L->count >= MAX){
+        printf("List is full.\n");
+
+    } else {
+
+        int i;
+
+        for(i = L->count - 1; i >= 0 && L->elem[i] > data; i--){
+            L->elem[i + 1] = L->elem[i];
+        }
+
+        L->elem[i + 1] = data;
+        L->count++;
+    }
+}
+
+void display(EPtr L){
+
+    printf("elem: ");
+
+    for(int i = 0; i < L->count; i++){
+        printf("%d ", L->elem[i]);
+    }
+
+    printf("\n");
+}
+
+void makeNULL(EPtr L){
+    free(L);
+}
+
+void bubbleSort(EPtr l){
+    int temp;
+    for(int i = 0; i < l->count - 1;i++){
+        for(int j = 0; j < l->count - i - 1;j++){
+            if(l->elem[j] > l->elem[j+1]){
+                temp = l->elem[j];
+                l->elem[j] = l->elem[j + 1];
+                l->elem[j + 1] = temp;
+            }
+        }
     }
 }
