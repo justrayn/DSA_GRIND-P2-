@@ -24,6 +24,7 @@ void deletePos(List *list, int index);
 int retrieve(List *list, int index);
 int locate(List *list, int data);
 void display(List *list);
+void bubbleSort(List *list);
 
 int main (){
  List *L = initialize();
@@ -283,3 +284,24 @@ void display(List *list){
     }
     printf("NULL\n");
 }
+
+void bubbleSort(List *list) {
+    if (list->head == NULL || list->head->next == NULL) {
+        return; 
+    }
+
+    int swapped, temp;
+    Node *ptr;
+    do {
+        swapped = 0;
+        for (ptr = list->head; ptr->next != NULL; ptr = ptr->next) {
+            if (ptr->data > ptr->next->data) {
+                temp = ptr->data;
+                ptr->data = ptr->next->data;
+                ptr->next->data = temp;
+                swapped = 1;
+            }
+        }
+    } while (swapped);
+}
+

@@ -1,215 +1,307 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define MAX 10
+typedef struct node {
+    int data;
+    struct node *next;
+} Node;
 
 typedef struct {
-    int elem[MAX];
+    Node *head;
     int count;
-} Etype, *EPtr;
+} List;
 
-void initialize(EPtr L);
-void insertPos(EPtr L, int data, int position);
-void deletePos(EPtr L, int position);
-int locate(EPtr L, int data);
-int retrieve(EPtr L, int position);
-void insertSorted(EPtr L, int data);
-void display(EPtr L);
-void makeNULL(EPtr L);
-void bubbleSort(EPtr l);
-
+// Variation 2
+List* initialize();
+void empty(List *list);
+void insertFirst(List *list, int data);
+void insertLast(List *list, int data);
+void insertPos(List *list, int data, int index);
+void deleteStart(List *list);
+void deleteLast(List *list);
+void deletePos(List *list, int index);
+int retrieve(List *list, int index);
+int locate(List *list, int data);
+void display(List *list);
+void bubbleSort(List *list);
 
 int main (){
-    EPtr L = (EPtr)malloc(sizeof(Etype));
-    initialize(L);
-
+ List *L = initialize();
+    
     while(1){
-
-        int op, cData, cLoc, found;
-
-        printf("\nplease choose what kind of operation...\n\n");
-        printf("1: Insert\n");
-        printf("2: Delete\n");
-        printf("3: Locate\n");
-        printf("4: InsertSorted\n");
-        printf("5: Show\n");
-        printf("0: Exit\n");
-
-        printf("Enter operation: ");
+        int op, cdata, cloc, found;
+        printf("\n\n--Please choose an operation--\n");
+        printf("\n0.exit program\n1.insertFirst\n2.insertLast\n3.insertPos\n4.deleteFirst\n5.deleteLast\n6.deletePos\n7.Locate\n8.diplying all i have got </3\nInput operation:");
         scanf("%d", &op);
-
+        
         switch(op){
-
-        case 0:
-            free(L);
+            case 0:
             exit(0);
+            break;
 
-        case 1:
-            if(L->count >= MAX){
-                printf("Can't insert. List is full.\n");
-            }else{
+            case 1:
+            printf("\n.using the insertFirst..\n Input data to insert: ");
+            scanf("%d", &cdata);
+            insertFirst(L, cdata);
+            break;
+            
+            case 2:
+             printf("\n.using the insertLast..\n Input data to insert: ");
+             scanf("%d", &cdata);
+             insertLast(L, cdata);
+            break;
 
-                printf("What do you want to insert?: ");
-                scanf("%d", &cData);
+            case 3:
+             printf("\n.using the insertPos..\n Input data to insert: ");
+              scanf("%d", &cdata);
+              printf("\nwhat position?(0-%d)", L->count);
+              scanf("%d", &cloc);
+              insertPos(L, cdata, cloc);
+            break;
 
-                printf("Where do you want to put it? (0-%d): ", L->count);
-                scanf("%d", &cLoc);
-
-                insertPos(L, cData, cLoc);
-            }
-        break;
-
-        case 2:
+            case 4:
             if(L->count == 0){
-                printf("Nothing to delete.\n");
-            }else{
-
-                printf("What position do you want to delete?: ");
-                scanf("%d", &cLoc);
-
-                deletePos(L, cLoc);
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deleteFirst..\ndeleting first data..\n");
+            deleteStart(L);
             }
-        break;
+            break;
 
-        case 3:
+            case 5:
             if(L->count == 0){
-                printf("List is empty.\n");
-            }else{
-
-                printf("Find what?: ");
-                scanf("%d", &cData);
-
-                found = locate(L, cData);
-
-                if(found != -1){
-                    printf("Wow its actually there.. in %d\n", found);
-                }else{
-                    printf("Not there...\n");
-                }
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deleteLast..\ndeleting Last data..\n");
+             deleteLast(L);
             }
-        break;
+             
+            break;
 
-        case 4:
-            if(L->count >= MAX){
-                printf("List is full.\n");
-            }else{
-
-                printf("What do you want to insert?: ");
-                scanf("%d", &cData);
-
-                insertSorted(L, cData);
-            }
-        break;
-
-        case 5:
+            case 6:
             if(L->count == 0){
-                printf("Nothing here...\n");
-            }else{
-                printf("Displaying data...\n");
-                display(L);
+                printf("\nnothing to delete im sorry...\n");
+            } else {
+                printf("\n.using the deletePos..\nInput index of data to delete");
+            scanf("%d", &cloc);
+            deletePos(L, cloc);
             }
-        break;
+            
+            break;
 
-        default:
-            printf("Invalid option.\n");
+            case 7:
+            if(L->count == 0){
+                printf("\nnothing to locate im sorry...\n");
+            }  else {
+            printf("\n using Locate...\nInput data to locate..\n");
+            scanf("%d", &cloc);
+            found = locate(L, cloc);
+            if(found == -1){
+                printf("\ndata is not there..\n");
+            } else {
+                printf("\n%d is there!..\n", cloc);
+            }
+            }
+            
+            break;
+            
+
+            case 8:
+            printf("displaying data..\n");
+            display(L);
+
         }
     }
-
+    
     return 0;
 }
 
-void initialize(EPtr L){
-    L->count = 0;
+List* initialize(){
+
+    List *List = malloc(sizeof(List));
+    if(List == NULL){
+        printf("Memory Allocation Failed");
+        return NULL;
+    }
+    List->head = NULL;
+    List->count = 0;
+    return List;
+
 }
 
-void insertPos(EPtr L, int data, int position){
 
-    if(position < 0 || position > L->count || L->count >= MAX){
-        printf("Invalid Position!\n");
+void empty(List *list){
+    Node *current = list->head;
+    Node *temp;
+    while(current != NULL){
+        temp = current;
+        current = current->next;
+        free(temp);
+    }
+    list->head = NULL;
+    list->count = 0;
+
+}
+
+void insertFirst(List *list, int data){
+    Node *newNode = malloc(sizeof(Node));
+    if(newNode != NULL){
+        newNode->data = data;
+        newNode->next = list->head;
+        list->head = newNode;
+        list->count++;
+    }
+}
+   
+
+void insertLast(List *list, int data){
+    Node* newNode = malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    if(list->head == NULL){
+        list->head = newNode;
+        list->count++;
     } else {
-
-        for(int i = L->count; i > position; i--){
-            L->elem[i] = L->elem[i - 1];
+        Node* current = list->head;
+        while(current->next != NULL){
+            current = current->next;
         }
-
-        L->elem[position] = data;
-        L->count++;
+        current->next = newNode;
+        list->count++;
     }
+
+
 }
 
-void deletePos(EPtr L, int position){
+void insertPos(List *list, int data, int index){
+    if(index <= list->count){
+        if(index == 0){
+        insertFirst(list, data);
+        } else if(index == list->count){
+            insertLast(list, data);
+        } else {
+        Node* newNode = malloc(sizeof(Node));
+        newNode->data = data;
+        Node* current = list->head;
+        for(int i = 0; i < index - 1 && current->next != NULL; i++){
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
+        list->count++;
+        }
+    }
 
-    if(position < 0 || position >= L->count){
-        printf("Invalid Position!\n");
+}
+
+void deleteStart(List *list){
+    if(list->head != NULL){
+        Node* current = list->head;
+        list->head = list->head->next;
+        free(current);
+        list->count--;
+    }
+     
+}
+
+void deleteLast(List *list){
+    if(list->count == 0){
+        printf("nothing to delete dumass");
+    } else if(list->count == 1){
+        free(list->head);
+        list->head = NULL;
+        list->count--;
+
     } else {
-
-        for(int i = position; i < L->count - 1; i++){
-            L->elem[i] = L->elem[i + 1];
+        Node* current = list->head;
+        for(int i = 0; i < list->count - 2; i++){
+            current = current->next;
         }
-
-        L->count--;
+        free(current->next);
+        current->next = NULL;
+        list->count--;
     }
+    
+
 }
 
-int locate(EPtr L, int data){
-    int i;
-    for(i = 0; i < L->count && L->elem[i] != data; i++){}
-    return (i < L->count) ? i : -1;
-}
-
-int retrieve(EPtr L, int position){
-
-    int data = -10000000;
-
-    if(position >= 0 && position < L->count){
-        data = L->elem[position];
+void deletePos(List *list, int index){
+    if(index >= list->count || index < 0){
+        printf("invalid\n");
     }
-
-    return data;
-}
-
-void insertSorted(EPtr L, int data){
-
-    if(L->count >= MAX){
-        printf("List is full.\n");
-
+    else if(index == 0){
+        deleteStart(list);
     } else {
-
-        int i;
-
-        for(i = L->count - 1; i >= 0 && L->elem[i] > data; i--){
-            L->elem[i + 1] = L->elem[i];
+        Node* current = list->head;
+        for(int i = 0; i < index - 1; i++){
+            current = current->next;
         }
-
-        L->elem[i + 1] = data;
-        L->count++;
+        
+        Node* temp = current->next;
+        current->next = temp->next;
+        free(temp);
+        list->count--;
     }
 }
 
-void display(EPtr L){
+int retrieve(List *list, int index){
+    int val = -1;
+    if(index >= list->count || index < 0){
+        printf("Invalid index");
+    } else {
+        Node* current = list->head;
+        for(int i = 0; i < index; i++){
+            current = current->next;
+        }
+        val = current->data;
+    }
+    return val;
+}
 
-    printf("elem: ");
+int locate(List *list, int data){
+    int retval = -1;
+    Node* current = list->head;
+    int index = 0;
 
-    for(int i = 0; i < L->count; i++){
-        printf("%d ", L->elem[i]);
+    while(current != NULL && retval == -1){
+        if(current->data == data){
+            retval = index;
+        } else {
+            current = current->next;
+            index++;
+        }
     }
 
-    printf("\n");
+    return retval;
 }
 
-void makeNULL(EPtr L){
-    free(L);
+void display(List *list){
+    Node* current = list->head;
+    while(current != NULL){
+       printf("%d --> ", current->data);   
+        current = current->next;
+    }
+    printf("NULL\n");
 }
 
-void bubbleSort(EPtr l){
-    int temp;
-    for(int i = 0; i < l->count - 1;i++){
-        for(int j = 0; j < l->count - i - 1;j++){
-            if(l->elem[j] > l->elem[j+1]){
-                temp = l->elem[j];
-                l->elem[j] = l->elem[j + 1];
-                l->elem[j + 1] = temp;
+void bubbleSort(List *list) {
+    if (list->head == NULL || list->head->next == NULL) {
+        return; 
+    }
+
+    int swapped, temp;
+    Node *ptr;
+    do {
+        swapped = 0;
+        for (ptr = list->head; ptr->next != NULL; ptr = ptr->next) {
+            if (ptr->data > ptr->next->data) {
+                temp = ptr->data;
+                ptr->data = ptr->next->data;
+                ptr->next->data = temp;
+                swapped = 1;
             }
         }
-    }
+    } while (swapped);
 }
+
