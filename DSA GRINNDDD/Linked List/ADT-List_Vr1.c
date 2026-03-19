@@ -97,7 +97,7 @@ int main (){
             printf("\n using Locate...\nInput data to locate..\n");
             scanf("%d", &cloc);
             found = locate(L, cloc);
-            if(found = -1){
+            if(found == -1){
                 printf("\ndata is not there..\n");
             } else {
                 printf("\n%d is there!..\n", cloc);
@@ -217,8 +217,7 @@ List deleteLast(List list){
 
 List deletePos(List list, int index){
     if(index == 0 ){
-        deleteFirst(list);
-        return list;
+        return deleteFirst(list);
     }
 
     Node* current = list.head;

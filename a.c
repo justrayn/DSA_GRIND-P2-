@@ -3,61 +3,31 @@
 #include <stdbool.h>
 #include <string.h>
 
-typedef struct Node{
-    int data;
-    struct Node *next;
-}Node, *NodePtr, *List;
+#define MAX 10
 
+typedef struct {
+    int top;
+    int elems[MAX];
+}Stack;
 
-void init(List *l);
-void insertFirst(List *l, int data);
-void insertLast(List *l, int data);
-void insertPos(List *l, int data, int pos);
-void DeleteFirst(List *l);
-void DeleteLast(List *l);
-void DeletePos(List *l, int pos);
+Stack *init();
+bool isEmpty(Stack *s);
+bool isFull(Stack *s);
+int peek(Stack *s);
+int top(Stack *s);
+void push(Stack *s);
+int pop(Stack *s);
 
 int main(){
-
 
 
     return 0;
 }
 
-void init(List *l){
-    *l = NULL;
-}
-void insertFirst(List *l, int data){
-    List newD = malloc(sizeof(Node));
-    if(newd != NULL){
-        newD->data = data;
-        newD->next = *l;
-        *l = newD;
-    }
-}
-void insertLast(List *l, int data){
-    List newD = malloc(sizeof(Node));
-    if(newd != NULL){
-        newD->data = data;
-        newD->next = NULL;
-        if(*l == NULL){
-            *l = newD;
-        } else {
-            List *curr;
-            for(curr = l; (*curr)->next != NULL; curr = &(*curr)->next){}
-            &(*curr)->next = newD;
-        }
-    }
-}
-
-void DeleteFirst(List *l){
-    NodePtr *curr = l;
-    (*l) = (*l)->next;
-    free(curr);
-}
-void DeleteLast(List *l){
-
-}
-void DeletePos(List *l, int pos){
-    
-}
+Stack *init();
+bool isEmpty(Stack *s);
+bool isFull(Stack *s);
+int peek(Stack *s);
+int top(Stack *s);
+void push(Stack *s);
+int pop(Stack *s);
