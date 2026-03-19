@@ -117,26 +117,13 @@ void deleteFront(List *list){
     free(temp);
 }
 void deleteRear(List *l) {
-    // 1. Check if the list is empty
-    if (*l == NULL) {
-        return;
-    }
+    if (*l == NULL) return;
 
-    // 2. If there is only one node
-    if ((*l)->next == NULL) {
-        free(*l);
-        *l = NULL;
-    } else {
-        // 3. Traverse to the second-to-last node
-        List *trav;
-        for (trav = l; (*trav)->next != NULL; trav = &(*trav)->next) {
-            // This loop moves until *trav is the pointer to the last node
-        }
-        
-        // At this point, *trav is the pointer to the last node
-        free(*trav);
-        *trav = NULL; // This effectively sets the previous node's 'next' to NULL
-    }
+    List *trav;
+    for (trav = l; (*trav)->next != NULL; trav = &(*trav)->next) {}
+
+    free(*trav);
+    *trav = NULL;
 }
 
 
