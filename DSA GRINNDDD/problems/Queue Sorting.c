@@ -82,42 +82,37 @@ void display(Queue* q){
    }
 }
 
-void sortQ(Queue* q) {
-    if (isEmpty(q)) return;
-
+void sortQ(Queue* q){
+    if(isEmpty(q)) return;
+    
     Queue *sortedQ = initialize();
-
-    while (!isEmpty(q)) {
+    
+    while(!isEmpty(q)){
         int minVal = dequeue(q);
-        Queue *tempQ = initialize();
-
-        // Find the minimum
-        while (!isEmpty(q)) {
-            int current = dequeue(q);
-
-            if (current < minVal) {
-                enqueue(tempQ, minVal);
-                minVal = current;
+        Queue *rotationQ = initialize();
+        
+        while(!isEmpty(q)){
+            int currentVal = dequeue(q);
+            if(currentVal < minVal){
+                enqueue(rotationQ, minVal);
+                minVal = currentVal;
             } else {
-                enqueue(tempQ, current);
+                enqueue(rotationQ, currentVal);
             }
         }
-
-        // Restore remaining elements
-        while (!isEmpty(tempQ)) {
-            enqueue(q, dequeue(tempQ));
+        while(!isEmpty(rotationQ)){
+            enqueue(q, dequeue(rotationQ));
         }
-
-        free(tempQ);
-
-        // Add minimum to sorted queue
+        
+        free(rotationQ);
         enqueue(sortedQ, minVal);
     }
-
-    // Copy back to original queue
-    while (!isEmpty(sortedQ)) {
+    
+    while(!isEmpty(sortedQ)){
         enqueue(q, dequeue(sortedQ));
+        
     }
-
+    
     free(sortedQ);
+    
 }
