@@ -22,7 +22,7 @@ void display(Stack* s);
 int main (){
 
     Stack *s = initialize();
-    int num, choice;
+    int num, choice, topval;
     do{
         printf("\nMenu:\n[1]: Push\n[2]: Pop\n[3]: Peek\n[4]: Top\n[5]: Display\n[0]: Exit\n");
         printf("Enter Choice: ");
@@ -48,7 +48,7 @@ int main (){
                 }
                 break;
             case 4:
-                int topval = top(s);
+                topval = top(s);
                 printf("Top Value = %d\n", topval);
                 break;
             case 5:
@@ -125,9 +125,9 @@ int top(Stack* s){
 
 void display(Stack *s) {
     // 1. Initialize the temporary stack correctly
-    Stack *temp = init(); 
+    Stack *temp = initialize(); 
     
-    if (s->top != -1) {
+    if (isEmpty(s)) {
         printf("Stack contents:\n");
         
         // 2. Move from S to TEMP to see items
