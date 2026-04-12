@@ -1,161 +1,106 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-#define MAX 10
+#define MAX 4
 
-// Node structure (array-based)
+
+//cursor base var 1
+
 typedef struct {
-    char data;
+    int data;
     int next;
-} Node;
+}Cell, HeapSpace[MAX];
 
-// Virtual Heap
-typedef struct {
-    Node H[MAX];
+ typedef struct {
+    HeapSpace H;
     int avail;
-} VHeap;
+}VHeap;
 
-// List = index (like pointer)
 typedef int List;
 
-// ================= INITIALIZE =================
+void initialize(VHeap *V);
+int allocSpace(VHeap* V);
+void deallocSpace(VHeap* V, int index);
+void insertFirst(int* L, VHeap* V, int elem);
+void insertLast(int *L, VHeap* V, int elem);
+void insertPos(int* L, VHeap* V, int elem);
+void insertSorted(int* L, VHeap* V, int elem);
+void delete(int* L, VHeap* V, int elem);
+void deleteAllOccurence(int* L, VHeap* V, int elem);
+void display(int L, VHeap V);
+
+int main(){
+
+
+
+    return 0;
+}
+
 void initialize(VHeap *V){
-    int i;
-    for(i = 0; i < MAX - 1; i++){
+    V->avail = 0;
+    for(int i = 0 ; i < MAX;i++){
         V->H[i].next = i + 1;
     }
     V->H[MAX - 1].next = -1;
-    V->avail = 0;
 }
-
-// ================= ALLOC =================
-int allocSpace(VHeap *V){
-    int temp = V->avail;
-
-    if(temp != -1){
-        V->avail = V->H[temp].next;
+int allocSpace(VHeap* V){
+    int data = 0;
+    if(V->avail <= MAX - 1){
+        data = V->H[V->avail];
+        V->avail = V->H[V->avail].next;
     }
-
-    return temp;
+    return data;
 }
-
-// ================= DEALLOC =================
-void deallocSpace(VHeap *V, int index){
+void deallocSpace(VHeap* V, int index){
     V->H[index].next = V->avail;
     V->avail = index;
 }
+void insertFirst(int* L, VHeap* V, int elem){
+    int new = allocSpace(V);
 
-// ================= INSERT FIRST =================
-void insertFirst(List *L, VHeap *V, char elem){
-    int temp = allocSpace(V);
-
-    if(temp != -1){
-        V->H[temp].data = elem;
-        V->H[temp].next = *L;
-        *L = temp;
+    if(new != -1){
+        V->H[new].data = elem;
+        V->H[new].next = *L;
+        *L = new;
     }
 }
+void insertLast(int *L, VHeap* V, int elem){
+    int new = allocSpace(V);
 
-// ================= INSERT LAST =================
-void insertLast(List *L, VHeap *V, char elem){
-    int temp = allocSpace(V);
-
-    if(temp != -1){
-        V->H[temp].data = elem;
-        V->H[temp].next = -1;
+    if(new != -1){
+        V->H[new].data = elem;
+        V->H[new].next = -1;
 
         if(*L == -1){
-            *L = temp;
+            *L = new;
         } else {
-            int trav;
-            for(trav = *L; V->H[trav].next != -1; trav = V->H[trav].next){}
-            V->H[trav].next = temp;
+            int temp = *L;
+            while(V->H[temp].next != -1){
+                temp = V->H[temp].next;
+            }
+            V->H[temp].next = new;
         }
     }
 }
+void insertPos(int* L, VHeap* V, int elem){
 
-// ================= INSERT SORTED =================
-void insertSorted(List *L, VHeap *V, char elem){
-    int temp = allocSpace(V);
-
-    if(temp != -1){
-        V->H[temp].data = elem;
-
-        int *trav = L;
-
-        while(*trav != -1 && V->H[*trav].data < elem){
-            trav = &V->H[*trav].next;
-        }
-
-        V->H[temp].next = *trav;
-        *trav = temp;
-    }
 }
+void insertSorted(int* L, VHeap* V, int elem){
 
-// ================= DELETE ONE =================
-void deleteElem(List *L, VHeap *V, char elem){
-    int *trav = L;
-
-    while(*trav != -1 && V->H[*trav].data != elem){
-        trav = &V->H[*trav].next;
-    }
-
-    if(*trav != -1){
-        int temp = *trav;
-        *trav = V->H[temp].next;
-        deallocSpace(V, temp);
-    }
 }
+void delete(int* L, VHeap* V, int elem){
 
-// ================= DELETE ALL =================
-void deleteAll(List *L, VHeap *V, char elem){
-    int *trav = L;
-
-    while(*trav != -1){
-        if(V->H[*trav].data == elem){
-            int temp = *trav;
-            *trav = V->H[temp].next;
-            deallocSpace(V, temp);
-        } else {
-            trav = &V->H[*trav].next;
-        }
-    }
 }
+void deleteAllOccurence(int* L, VHeap* V, int elem){
 
-// ================= DISPLAY =================
-void display(List L, VHeap V){
-    printf("List: ");
-    int trav;
-
-    for(trav = L; trav != -1; trav = V.H[trav].next){
-        printf("%c -> ", V.H[trav].data);
-    }
-    printf("NULL\n");
 }
+void display(int L, VHeap V){
+    int temp = L;
 
-// ================= MAIN =================
-int main(){
-    VHeap V;
-    List L = -1;
-
-    initialize(&V);
-
-    insertFirst(&L, &V, 'C');
-    insertFirst(&L, &V, 'A');
-    insertLast(&L, &V, 'D');
-    insertSorted(&L, &V, 'B');
-
-    display(L, V);
-
-    deleteElem(&L, &V, 'B');
-    display(L, V);
-
-    insertSorted(&L, &V, 'C');
-    insertSorted(&L, &V, 'C');
-    display(L, V);
-
-    deleteAll(&L, &V, 'C');
-    display(L, V);
-
-    return 0;
+    while(temp != -1){
+        printf("%d ", V.H[temp].data);
+        temp = V.H[temp].next;
+    }
+    printf("\n");
 }
