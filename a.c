@@ -1,260 +1,279 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#define MAX 4
+typedef char string[50];
 
-#define MAX 15
-
-typedef char string[16];
-
-typedef struct{
-    string acctname;
+typedef struct {
+    string acct_name;
     string id;
-}User;    
+}ign;
+
+typedef struct {
+    int speed;
+    int accelaration;
+    int weight;
+    int reaction;
+    int healing;
+}Stats;
+
+typedef struct {
+    Stats body;
+    Stats wheel;
+    Stats parachute;
+    Stats total;
+}Car;
+
 
 typedef struct{
     string charName;
-    float weight;
+    int weight;
 }Character;
 
 typedef struct{
-    int speed, acceleration, weight, handling, traction;
-}Stats;
-
-typedef struct{
-    string componentName;
-    Stats car, wheels, glider, total;
-}Car;
-
-typedef struct{
-    string itemName;
+    string name;
     string desc;
-}Inventory;
+}Item;
 
-typedef struct{
-    User IGN;
-    Character selected;
-    Car chosen;
-    Inventory items[2];
+typedef struct {
+    ign handle;
+    Character Selected;
+    Car Chosen;
+    Item inventory[3];
+    int countINV;
     int coins;
 }Player;
 
-typedef struct{
-    Player details;
+typedef struct {
+    Player racer;
     int next;
-}cell, HeapSpace[MAX];
+}RacerNode;
 
-typedef struct{
-    HeapSpace H;
+typedef struct {
+    RacerNode List[MAX];
     int avail;
 }VHeap;
 
-typedef struct{
-    int L;
+typedef struct {
+    int List;
     int count;
 }RaceList;
 
-void initVHeap(VHeap *VH) {
-    for (int i = 0; i < MAX - 1; i++) {
-        VH->H[i].next = i + 1;
-    }
-    VH->H[MAX - 1].next = -1;
-    VH->avail = 0;
+void initVHeap(VHeap* V);
+int allocSpace(VHeap* V);
+void deallocSpace(VHeap* V, int index);
+void insertFirst(RaceList* L, VHeap* V,Player p);
+void insertLast(RaceList* L, VHeap* V, Player p);
+void insertPos(RaceList *L, VHeap *V, Player p, int pos);
+void insertSorted(RaceList *L, VHeap *V, Player p);
+void deleteFirst(RaceList *L, VHeap *V);
+void deleteLast(RaceList *L, VHeap *V);
+void deletePos(RaceList *L, VHeap *V, int pos);
+void deleteByID(RaceList *L, VHeap *V, string id);
+void additem(Player *p, Item I);
+void useItem(Player *p);
+void display(RaceList L, VHeap V);
+
+int main(){
+    VHeap V;
+    RaceList RL = {-1, 0};
+
+    initVHeap(&V);
+
+    
+    Player p1, p2, p3;
+
+    strcpy(p1.handle.id, "P1");
+    p1.coins = 50;
+    p1.countINV = 0;
+
+    strcpy(p2.handle.id, "P2");
+    p2.coins = 30;
+    p2.countINV = 0;
+
+    strcpy(p3.handle.id, "P3");
+    p3.coins = 70;
+    p3.countINV = 0;
+
+   
+    insertSorted(&RL, &V, p1);
+    insertSorted(&RL, &V, p2);
+    insertSorted(&RL, &V, p3);
+
+    printf("\n=== After InsertSorted ===\n");
+    display(RL, V);
+
+    
+    deleteFirst(&RL, &V);
+
+    printf("\n=== After deleteFirst ===\n");
+    display(RL, V);
+
+    
+    Item i1 = {"Mushroom", "Speed Boost"};
+    Item i2 = {"Shell", "Attack"};
+    Item i3 = {"Banana", "Trap"};
+
+    additem(&p1, i1);
+    additem(&p1, i2);
+    additem(&p1, i3);
+
+    printf("\n=== Using Items (FIFO) ===\n");
+    useItem(&p1);
+    useItem(&p1);
+    useItem(&p1);
+    useItem(&p1); 
+    return 0;
 }
 
-int allocSpace(VHeap *VH) {
-    int temp = VH->avail;
-    if (temp != -1) {
-        VH->avail = VH->H[temp].next;
+void initVHeap(VHeap* V){
+    V->avail = 0;
+    for(int i = 0; i < MAX - 1; i++){
+        V->List[i].next = i + 1;
+    }
+    V->List[MAX - 1].next = -1;
+}
+int allocSpace(VHeap* V){
+    int temp = V->avail;
+    if(temp != -1){
+        V->avail = V->List[temp].next;
     }
     return temp;
 }
-
-void deallocSpace(VHeap *VH, int index) {
-    VH->H[index].next = VH->avail;
-    VH->avail = index;
+void deallocSpace(VHeap* V, int index){
+    V->List[index].next = V->avail;
+    V->avail = index;
 }
-
-void insertFirst(RaceList *RL, VHeap *VH, Player p) {
-    int newNode = allocSpace(VH);
-    if (newNode != -1) {
-        VH->H[newNode].details = p;
-        VH->H[newNode].next = RL->L;
-        RL->L = newNode;
-        RL->count++;
+void insertFirst(RaceList* L, VHeap* V,Player p){
+    int new = allocSpace(V);
+    if(new != -1){
+        V->List[new].racer = p;
+        V->List[new].next = L->List;
+        L->List = new;
+        L->count++;
     }
 }
+void insertLast(RaceList* L, VHeap* V, Player p){
+    int new = allocSpace(V);
 
-void insertLast(RaceList *RL, VHeap *VH, Player p) {
-    int newNode = allocSpace(VH);
-    if (newNode != -1) {
-        VH->H[newNode].details = p;
-        VH->H[newNode].next = -1;
+    if(new != -1){
+        V->List[new].racer = p;
+        V->List[new].next = -1;
 
-        int *trav = &RL->L;
-        while (*trav != -1) {
-            trav = &VH->H[*trav].next;
+        if(L->List == -1){
+            L->List = new;
+            L->count++;
+        } else {
+            int* trav;
+            for(trav = &L->List; *trav != -1; trav = &V->List[*trav].next){}
+            *trav = new;
+            L->count++;
+        }
+    }
+}
+void insertPos(RaceList *L, VHeap *V, Player p, int pos){
+    int new = allocSpace(V);
+
+    if(new != -1){
+        V->List[new].racer = p;
+
+        int *trav = &L->List;
+
+        for(int i = 0; i < pos && *trav != -1; i++){
+            trav = &V->List[*trav].next;
         }
 
-        *trav = newNode;
-        RL->count++;
+        V->List[new].next = *trav;
+        *trav = new;
+
+        L->count++;
     }
 }
-
-void insertAtPos(RaceList *RL, VHeap *VH, Player p, int pos) {
-    if (pos < 0 || pos > RL->count) return;
-
-    int newNode = allocSpace(VH);
-    if (newNode == -1) return;
-
-    int *trav = &RL->L;
-    for (int i = 0; i < pos; i++) {
-        trav = &VH->H[*trav].next;
-    }
-
-    VH->H[newNode].details = p;
-    VH->H[newNode].next = *trav;
-    *trav = newNode;
-
-    RL->count++;
-}
-
-void insertSorted(RaceList *RL, VHeap *VH, Player p) {
-    int newNode = allocSpace(VH);
-    if (newNode == -1) return;
-
-    int *trav = &RL->L;
-    while (*trav != -1 && VH->H[*trav].details.coins < p.coins) {
-        trav = &VH->H[*trav].next;
-    }
-
-    VH->H[newNode].details = p;
-    VH->H[newNode].next = *trav;
-    *trav = newNode;
-
-    RL->count++;
-}
-
-void deleteFirst(RaceList *RL, VHeap *VH) {
-    if (RL->L != -1) {
-        int temp = RL->L;
-        RL->L = VH->H[temp].next;
-        deallocSpace(VH, temp);
-        RL->count--;
+void insertSorted(RaceList *L, VHeap *V, Player p){
+    int new = allocSpace(V);
+    if(new != -1){
+        V->List[new].racer = p;
+        int *trav;
+        for(trav = &L->List; *trav != -1 && V->List[*trav].racer.coins < p.coins; trav = &V->List[*trav].next){}
+        V->List[new].next = *trav;
+        *trav = new;
+        L->count++;
     }
 }
-
-void deleteLast(RaceList *RL, VHeap *VH) {
-    if (RL->L == -1) return;
-
-    int *trav = &RL->L;
-    while (VH->H[*trav].next != -1) {
-        trav = &VH->H[*trav].next;
+void deleteFirst(RaceList *L, VHeap *V){
+    if(L->List != -1){
+        int temp = L->List;
+        L->List = V->List[temp].next;
+        deallocSpace(V, temp);
+        L->count--;
     }
-
-    int temp = *trav;
-    *trav = -1;
-
-    deallocSpace(VH, temp);
-    RL->count--;
 }
+void deleteLast(RaceList *L, VHeap *V){
+    if(L->List != -1){
+       if(V->List[L->List].next == -1){
+            int temp = L->List;
+            L->List = -1;
+            deallocSpace(V, temp);
+        } else {
+            int *trav;
+            for(trav = &L->List; V->List[*trav].next != -1; 
+                trav = &V->List[*trav].next){}
 
-void deleteAtPos(RaceList *RL, VHeap *VH, int pos) {
-    if (pos < 0 || pos >= RL->count) return;
-
-    int *trav = &RL->L;
-    for (int i = 0; i < pos; i++) {
-        trav = &VH->H[*trav].next;
+            int temp = *trav;
+            *trav = -1;
+            deallocSpace(V, temp);
+        }
+        L->count--;
     }
-
-    int temp = *trav;
-    *trav = VH->H[temp].next;
-
-    deallocSpace(VH, temp);
-    RL->count--;
 }
-
-void deleteByID(RaceList *RL, VHeap *VH, char *id) {
-    int *trav = &RL->L;
-
-    while (*trav != -1 && strcmp(VH->H[*trav].details.IGN.id, id) != 0) {
-        trav = &VH->H[*trav].next;
-    }
-
-    if (*trav != -1) {
+void deletePos(RaceList *L, VHeap *V, int pos){
+    if(pos >= 0 && pos < L->count){
+        int *trav = &L->List;
+        for(int i = 0; i < pos; i++, trav = &V->List[*trav].next){}
         int temp = *trav;
-        *trav = VH->H[temp].next;
-
-        deallocSpace(VH, temp);
-        RL->count--;
+        *trav = V->List[temp].next;
+        deallocSpace(V, temp);
+        L->count--;
     }
 }
-
-void enqueueItem(Player *p, Inventory item) {
-    p->items[1] = p->items[0];
-    p->items[0] = item;
-}
-
-void dequeueItem(Player *p) {
-    p->items[0] = p->items[1];
-    strcpy(p->items[1].itemName, "");
-    strcpy(p->items[1].desc, "");
-}
-
-void display(RaceList RL, VHeap VH) {
-    int trav = RL.L;
-    printf("\nPlayers:\n");
-
-    while (trav != -1) {
-        printf("ID: %s | Coins: %d\n",
-               VH.H[trav].details.IGN.id,
-               VH.H[trav].details.coins);
-        trav = VH.H[trav].next;
+void deleteByID(RaceList *L, VHeap *V, string id){
+    if(L->List != -1){
+        int *trav;
+        for(trav = &L->List; *trav != -1 && strcmp(V->List[*trav].racer.handle.id, id) != 0; trav = &V->List[*trav].next ){}
+        if(*trav != -1){
+            int temp = *trav;
+            *trav = V->List[temp].next;
+            deallocSpace(V, temp);
+            L->count--;
+        }
     }
 }
-
-int main() {
-    VHeap VH;
-    RaceList RL = {-1, 0};
-
-    initVHeap(&VH);
-
-    Player p1 = {.IGN = {"Mario", "ID1"}, .coins = 50};
-    Player p2 = {.IGN = {"Luigi", "ID2"}, .coins = 30};
-    Player p3 = {.IGN = {"Peach", "ID3"}, .coins = 70};
-    Player p4 = {.IGN = {"Yoshi", "ID4"}, .coins = 40};
-
-    insertFirst(&RL, &VH, p1);
-    insertLast(&RL, &VH, p2);
-    insertAtPos(&RL, &VH, p3, 1);
-    insertSorted(&RL, &VH, p4);
-
-    display(RL, VH);
-
-    deleteFirst(&RL, &VH);
-    deleteLast(&RL, &VH);
-    deleteAtPos(&RL, &VH, 0);
-    deleteByID(&RL, &VH, "ID4");
-
-    display(RL, VH);
-
-    Inventory i1 = {"Shell", "Attack"};
-    Inventory i2 = {"Banana", "Trap"};
-    Inventory i3 = {"Mushroom", "Boost"};
-
-    enqueueItem(&p1, i1);
-    enqueueItem(&p1, i2);
-    enqueueItem(&p1, i3);
-
-    printf("\nInventory:\n");
-    for (int i = 0; i < 2; i++) {
-        printf("%s\n", p1.items[i].itemName);
+void additem(Player *p, Item I){
+    
+    if(p->countINV < 3){
+        p->inventory[p->countINV] = I;
+        p->countINV++;
+    } else {
+        printf("XX");
     }
+}
+void useItem(Player *p){
+    if(p->countINV > 0){
 
-    dequeueItem(&p1);
-
-    printf("\nAfter Dequeue:\n");
-    for (int i = 0; i < 2; i++) {
-        printf("%s\n", p1.items[i].itemName);
+        for(int i = 0; i < p->countINV - 1; i++){
+            p->inventory[i] = p->inventory[i + 1];
+        }
+        p->countINV--;
+    } else {
+        printf("Inventory Empty!\n");
     }
+}
+void display(RaceList L, VHeap V){
+    int trav = L.List;
+    printf("players: ");
 
-    return 0;
+    while(trav != -1){
+        printf("ID: %s | Coins: %d | Items: %d\n", V.List[trav].racer.handle.id, V.List[trav].racer.coins,  V.List[trav].racer.countINV);
+        trav = V.List[trav].next;
+    }
 }
