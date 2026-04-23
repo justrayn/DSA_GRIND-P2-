@@ -29,6 +29,10 @@ void insertPos(List *L, VHeap* V, int elem, int pos);
 void insertSorted(List *L, VHeap* V, int elem);
 
 void delete(List *L, VHeap* V, int elem);
+
+void deleteFirst(List *L, VHeap *V);
+void deleteLast(List *L, VHeap *V);
+void deleteAtPos(List *L, VHeap *V, int pos);
 void deleteAllOccurrence(List *L, VHeap* V, int elem);
 
 void display(List L, VHeap V);
@@ -145,6 +149,7 @@ void insertPos(List *L, VHeap* V, int elem, int pos) {
         *trav = newNode;
     }
 }
+
 // insert sorted (ascending)
 void insertSorted(List *L, VHeap* V, int elem){
     int new = allocSpace(V);
@@ -178,6 +183,41 @@ void delete(List *L, VHeap* V, int elem){
         deallocSpace(V, temp);
     }
 }
+
+void deleteFirst(List *L, VHeap *V){
+   if(*L != -1){
+    int temp = *L;
+    *L = V->H[temp].next;
+    deallocSpace(V, temp);
+   }
+}
+void deleteLast(List *L, VHeap *V){
+    if(*L != -1){
+        int *trav = L;
+        while(V->H[*trav].next != -1){
+            trav = &V->H[*trav].next;
+        }
+        int temp = *trav;
+        *trav = -1; // The previous node's next (or L) now becomes the end
+        deallocSpace(V, temp);
+    }
+}
+void deleteAtPos(List *L, VHeap *V, int pos){
+    int *trav = L;
+    int i;
+    // Move to the position, but stop if the list ends early
+    for(i = 0; i < pos && *trav != -1; i++){
+        trav = &V->H[*trav].next;
+    }
+    
+    // If we stopped because we found the position (not the end of list)
+    if(*trav != -1){
+        int temp = *trav;
+        *trav = V->H[temp].next;
+        deallocSpace(V, temp);
+    }
+}
+
 
 void deleteAllOccurrence(List *L, VHeap* V, int elem){
     int *trav = L;
