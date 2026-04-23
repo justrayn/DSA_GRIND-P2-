@@ -104,48 +104,45 @@ void insertFirst(List *L, VHeap* V, int elem){
     }
 }
 
-void insertLast(List *L, VHeap* V, int elem){
-    int new = allocSpace(V);
+void insertLast(List *L, VHeap* V, int elem) {
+    int newNode = allocSpace(V);
 
-    if(new != -1){
-        V->H[new].data = elem;
-        V->H[new].next = -1;
-
-        if(*L == -1){
-            *L = new;
-        } else {
-            int temp = *L;
-            while(V->H[temp].next != -1){
-                temp = V->H[temp].next;
-            }
-            V->H[temp].next = new;
+    if (newNode != -1) {
+        V->H[newNode].data = elem;
+        V->H[newNode].next = -1;
+        int *trav = L;
+        while (*trav != -1) {
+           
+            trav = &V->H[*trav].next;
         }
+        *trav = newNode;
     }
 }
 
 // insert at POSITION (0-based)
-void insertPos(List *L, VHeap* V, int elem, int pos){
-    int new = allocSpace(V);
+void insertPos(List *L, VHeap* V, int elem, int pos) {
+    int newNode = allocSpace(V);
+    
+    if (newNode != -1) {
+        // Prepare the new node
+        V->H[newNode].data = elem;
 
-    if(new != -1){
-        V->H[new].data = elem;
+        // 'trav' starts by pointing to the Head (*L)
+        int *trav = L;
+        int i;
 
-        if(pos == 0){
-            V->H[new].next = *L;
-            *L = new;
-        } else {
-            int temp = *L;
-            int i;
-
-            for(i = 0; i < pos - 1 && temp != -1; i++){
-                temp = V->H[temp].next;
-            }
-
-            if(temp != -1){
-                V->H[new].next = V->H[temp].next;
-                V->H[temp].next = new;
-            }
+        // Move 'trav' to point to the 'next' bucket of the node 
+        // that should point to our new node.
+        // We stop if we reach the position OR the end of the list.
+        for (i = 0; i < pos && *trav != -1; i++) {
+            trav = &V->H[*trav].next;
         }
+
+        // 1. Point the NEW node's next to what the CURRENT bucket holds
+        V->H[newNode].next = *trav;
+
+        // 2. Put the NEW node's index into that bucket
+        *trav = newNode;
     }
 }
 
